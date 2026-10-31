@@ -1,7 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { FaHandsHelping } from 'react-icons/fa';
 import {
   FiMapPin,
   FiPhone,
@@ -13,6 +12,7 @@ import {
   FiTwitter,
   FiLinkedin,
 } from 'react-icons/fi';
+import { HiSparkles } from 'react-icons/hi2';
 
 export default function Footer() {
   const [showScrollTop, setShowScrollTop] = useState(false);
@@ -30,36 +30,42 @@ export default function Footer() {
   };
 
   return (
-    <footer className="relative bg-base-200/80 border-t border-base-300/80 text-base-content mt-auto">
+    <footer className="relative bg-base-200/90 border-t border-base-300 text-base-content mt-auto">
       {/* Upper Footer */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 lg:py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
           {/* Brand Info */}
           <div className="space-y-4">
-            <Link href="/" className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-emerald-600 via-teal-500 to-cyan-500 flex items-center justify-center text-white shadow-md shadow-emerald-500/20">
-                <FaHandsHelping className="w-5 h-5" />
+            <Link href="/" className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-brand-600 via-indigo-600 to-sky-500 flex items-center justify-center text-white shadow-glow">
+                <HiSparkles className="w-5 h-5 text-amber-200" />
               </div>
-              <span className="text-2xl font-black tracking-tight bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 bg-clip-text text-transparent">
-                Altru
-              </span>
+              <div className="flex flex-col">
+                <span className="text-2xl font-black tracking-tight bg-gradient-to-r from-brand-600 via-indigo-600 to-sky-500 bg-clip-text text-transparent">
+                  Altru
+                </span>
+                <span className="text-[10px] font-bold uppercase tracking-wider text-base-content/50 -mt-1">
+                  Civic Network Bangladesh
+                </span>
+              </div>
             </Link>
             <p className="text-xs sm:text-sm text-base-content/70 leading-relaxed">
-              Altru is a community-driven social development events platform connecting compassionate volunteers and civic organizers to drive positive social change across Bangladesh.
+              Altru is a community-driven social development events platform connecting compassionate volunteers and youth organizers to drive positive social change across Bangladesh.
             </p>
+
             {/* Social Icons */}
-            <div className="flex items-center gap-2 pt-2">
+            <div className="flex items-center gap-2 pt-1">
               {[
-                { icon: <FiFacebook className="w-4 h-4" />, href: '#' },
-                { icon: <FiInstagram className="w-4 h-4" />, href: '#' },
-                { icon: <FiTwitter className="w-4 h-4" />, href: '#' },
-                { icon: <FiLinkedin className="w-4 h-4" />, href: '#' },
+                { icon: <FiFacebook className="w-4 h-4" />, href: '#', label: 'Facebook' },
+                { icon: <FiInstagram className="w-4 h-4" />, href: '#', label: 'Instagram' },
+                { icon: <FiTwitter className="w-4 h-4" />, href: '#', label: 'Twitter' },
+                { icon: <FiLinkedin className="w-4 h-4" />, href: '#', label: 'LinkedIn' },
               ].map((s, idx) => (
                 <a
                   key={idx}
                   href={s.href}
-                  className="w-8 h-8 rounded-lg bg-base-300/70 hover:bg-emerald-600 hover:text-white flex items-center justify-center text-base-content/70 transition-all duration-200"
-                  aria-label="Social Link"
+                  aria-label={s.label}
+                  className="w-8 h-8 rounded-xl bg-base-100 border border-base-300/80 flex items-center justify-center text-base-content/70 hover:text-brand-600 hover:border-brand-500/50 hover:bg-base-200 transition-all duration-200 shadow-sm"
                 >
                   {s.icon}
                 </a>
@@ -67,122 +73,121 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Core Categories */}
-          <div>
-            <h4 className="text-sm font-bold uppercase tracking-wider text-base-content mb-4">
-              Service Pillars
+          {/* Quick Links */}
+          <div className="space-y-3">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-base-content/50">
+              Community Navigation
             </h4>
-            <ul className="space-y-2 text-xs sm:text-sm text-base-content/70">
+            <ul className="space-y-2 text-xs sm:text-sm">
               <li>
-                <Link href="/events?type=Donation" className="hover:text-emerald-600 transition-colors">
-                  Winter Clothes & Blanket Drives
+                <Link href="/" className="hover:text-brand-600 transition-colors">
+                  Home Overview
                 </Link>
               </li>
               <li>
-                <Link href="/events?type=Cleanup" className="hover:text-emerald-600 transition-colors">
-                  Urban Clean & Green Campaigns
+                <Link href="/events" className="hover:text-brand-600 transition-colors">
+                  Upcoming Community Events
                 </Link>
               </li>
               <li>
-                <Link href="/events?type=Plantation" className="hover:text-emerald-600 transition-colors">
-                  Tree Plantations & Reforestation
+                <Link href="/create-event" className="hover:text-brand-600 transition-colors">
+                  Host a Service Event
                 </Link>
               </li>
               <li>
-                <Link href="/events?type=Food+Drive" className="hover:text-emerald-600 transition-colors">
-                  Hot Meals & Food Relief
+                <Link href="/manage-events" className="hover:text-brand-600 transition-colors">
+                  Organizer Dashboard
                 </Link>
               </li>
               <li>
-                <Link href="/events?type=Healthcare" className="hover:text-emerald-600 transition-colors">
-                  Free Medical & Blood Donation Camps
+                <Link href="/joined-events" className="hover:text-brand-600 transition-colors">
+                  My Joined Volunteer Schedule
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Quick Platform Links */}
-          <div>
-            <h4 className="text-sm font-bold uppercase tracking-wider text-base-content mb-4">
-              Community Hub
+          {/* Action Categories */}
+          <div className="space-y-3">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-base-content/50">
+              Active Focus Areas
             </h4>
-            <ul className="space-y-2 text-xs sm:text-sm text-base-content/70">
-              <li>
-                <Link href="/events" className="hover:text-emerald-600 transition-colors">
-                  Browse Upcoming Events
-                </Link>
+            <ul className="space-y-2 text-xs sm:text-sm text-base-content/75">
+              <li className="flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-warm-500"></span>
+                <span>Winter Clothes & Blanket Relief</span>
               </li>
-              <li>
-                <Link href="/create-event" className="hover:text-emerald-600 transition-colors">
-                  Organize an Event
-                </Link>
+              <li className="flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-sky-500"></span>
+                <span>Urban Lake & Park Cleanups</span>
               </li>
-              <li>
-                <Link href="/manage-events" className="hover:text-emerald-600 transition-colors">
-                  Manage My Events
-                </Link>
+              <li className="flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-brand-500"></span>
+                <span>Community Tree Plantations</span>
               </li>
-              <li>
-                <Link href="/joined-events" className="hover:text-emerald-600 transition-colors">
-                  My Joined Events
-                </Link>
+              <li className="flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+                <span>Free Medical & Dental Camps</span>
               </li>
-              <li>
-                <Link href="/profile" className="hover:text-emerald-600 transition-colors">
-                  Volunteer Profile
-                </Link>
+              <li className="flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-rose-500"></span>
+                <span>Emergency Flood & Crisis Food Relief</span>
               </li>
             </ul>
           </div>
 
-          {/* Contact Details */}
-          <div>
-            <h4 className="text-sm font-bold uppercase tracking-wider text-base-content mb-4">
+          {/* Headquarters Info */}
+          <div className="space-y-3">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-base-content/50">
               Dhaka Headquarters
             </h4>
-            <ul className="space-y-3 text-xs sm:text-sm text-base-content/70">
-              <li className="flex items-start gap-2.5">
-                <FiMapPin className="w-4 h-4 text-emerald-500 mt-0.5 flex-shrink-0" />
-                <span>House 42, Road 11, Banani, Dhaka-1213, Bangladesh</span>
-              </li>
-              <li className="flex items-center gap-2.5">
-                <FiPhone className="w-4 h-4 text-emerald-500 flex-shrink-0" />
-                <span>+880 1711-234567 (Volunteer Hotline)</span>
-              </li>
-              <li className="flex items-center gap-2.5">
-                <FiMail className="w-4 h-4 text-emerald-500 flex-shrink-0" />
-                <span>contact@altru-community.org</span>
-              </li>
-            </ul>
+            <div className="space-y-2 text-xs sm:text-sm text-base-content/75">
+              <div className="flex items-start gap-2.5">
+                <FiMapPin className="w-4 h-4 text-brand-600 mt-0.5 flex-shrink-0" />
+                <span>Level 4, House 28, Road 11, Banani, Dhaka-1213, Bangladesh</span>
+              </div>
+              <div className="flex items-center gap-2.5">
+                <FiPhone className="w-4 h-4 text-sky-500 flex-shrink-0" />
+                <span>+880 1712-000000</span>
+              </div>
+              <div className="flex items-center gap-2.5">
+                <FiMail className="w-4 h-4 text-warm-500 flex-shrink-0" />
+                <span>contact@altru-bangladesh.org</span>
+              </div>
+            </div>
+
+            <div className="pt-2">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-semibold bg-brand-50 dark:bg-brand-950/60 text-brand-700 dark:text-brand-300 border border-brand-200 dark:border-brand-800">
+                <span className="w-2 h-2 rounded-full bg-brand-500 animate-pulse"></span>
+                Altru Civic Grid Online
+              </span>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Bottom Legal / Copyright Bar */}
-      <div className="border-t border-base-300/80 bg-base-300/30">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-base-content/60">
-          <p>© {new Date().getFullYear()} Altru Social Development Platform. All rights reserved.</p>
-          <p className="flex items-center gap-1.5 font-medium">
-            <span>Crafted with</span>
-            <FiHeart className="w-3.5 h-3.5 text-red-500 fill-current" />
-            <span>for humanitarian communities in Bangladesh</span>
-          </p>
+      {/* Bottom Legal / Copyright */}
+      <div className="border-t border-base-300/80 bg-base-300/40 py-5">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-base-content/60">
+          <p>© {new Date().getFullYear()} Altru Bangladesh. Built for community impact.</p>
+          <div className="flex items-center gap-1 text-xs">
+            <span>Powered by volunteers uniting for solidarity</span>
+            <FiHeart className="w-3.5 h-3.5 text-rose-500 fill-current ml-0.5" />
+          </div>
         </div>
       </div>
 
       {/* Floating Scroll to Top Button */}
-      <button
-        onClick={scrollToTop}
-        className={`fixed bottom-6 right-6 w-10 h-10 bg-gradient-to-tr from-emerald-600 to-teal-500 text-white rounded-full shadow-lg flex items-center justify-center hover:scale-105 active:scale-95 transition-all duration-200 z-40 ${
-          showScrollTop
-            ? 'opacity-100 translate-y-0'
-            : 'opacity-0 translate-y-3 pointer-events-none'
-        }`}
-        aria-label="Scroll to top"
-      >
-        <FiArrowUp className="w-4 h-4" />
-      </button>
+      {showScrollTop && (
+        <button
+          onClick={scrollToTop}
+          className="fixed bottom-6 right-6 p-3 rounded-2xl bg-brand-600 hover:bg-brand-700 text-white shadow-glow hover:scale-105 active:scale-95 transition-all duration-200 z-40"
+          aria-label="Scroll to top"
+          title="Back to top"
+        >
+          <FiArrowUp className="w-5 h-5" />
+        </button>
+      )}
     </footer>
   );
 }
-

@@ -2,6 +2,7 @@
 import React from 'react';
 import { FiStar, FiHeart } from 'react-icons/fi';
 import { FaQuoteLeft } from 'react-icons/fa';
+import { HiSparkles } from 'react-icons/hi2';
 
 export default function TestimonialsSection() {
   const testimonials = [
@@ -38,18 +39,18 @@ export default function TestimonialsSection() {
   ];
 
   return (
-    <section className="py-16 sm:py-20 px-4 bg-base-200/50">
+    <section className="py-20 px-4 bg-base-200/50">
       <div className="max-w-7xl mx-auto">
-        <div className="text-center max-w-2xl mx-auto space-y-2 mb-12">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 text-xs font-bold uppercase tracking-wider">
-            <FiHeart className="w-3.5 h-3.5 text-rose-500 fill-current" />
+        <div className="text-center max-w-2xl mx-auto space-y-3 mb-14">
+          <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-brand-50 dark:bg-brand-950/60 border border-brand-200 dark:border-brand-800 text-brand-700 dark:text-brand-300 text-xs font-bold uppercase tracking-wider">
+            <HiSparkles className="w-4 h-4 text-warm-500" />
             <span>Volunteer Voices</span>
           </div>
-          <h2 className="text-2xl sm:text-4xl font-black text-base-content tracking-tight">
+          <h2 className="text-2xl sm:text-4xl font-extrabold text-base-content tracking-tight">
             Hear From Our Community Changemakers
           </h2>
-          <p className="text-xs sm:text-sm text-base-content/70">
-            Real stories from organizers and volunteers driving social progress on the ground.
+          <p className="text-xs sm:text-sm text-base-content/70 leading-relaxed">
+            Authentic reflections from grassroots organizers and student volunteers driving solidarity across Bangladesh.
           </p>
         </div>
 
@@ -57,32 +58,34 @@ export default function TestimonialsSection() {
           {testimonials.map((t, idx) => (
             <div
               key={idx}
-              className="bg-base-100 rounded-2xl p-6 border border-base-300 shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col justify-between space-y-4"
+              className="bg-base-100 rounded-3xl p-7 border border-base-300/80 shadow-soft hover:shadow-xl hover:border-brand-500/30 transition-all duration-300 flex flex-col justify-between space-y-6"
             >
-              <div className="space-y-3">
-                <FaQuoteLeft className="w-6 h-6 text-emerald-500/40" />
-                <p className="text-xs sm:text-sm text-base-content/80 leading-relaxed italic">
-                  &ldquo;{t.quote}&rdquo;
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-1 text-warm-500">
+                    {[...Array(t.rating)].map((_, i) => (
+                      <FiStar key={i} className="w-4 h-4 fill-current" />
+                    ))}
+                  </div>
+                  <FaQuoteLeft className="w-5 h-5 text-brand-400/40" />
+                </div>
+
+                <p className="text-xs sm:text-sm text-base-content/75 italic leading-relaxed">
+                  "{t.quote}"
                 </p>
               </div>
 
-              <div className="pt-4 border-t border-base-200 flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <img
-                    src={t.photo}
-                    alt={t.name}
-                    className="w-10 h-10 rounded-full object-cover border border-emerald-500/40"
-                  />
-                  <div>
-                    <h4 className="font-bold text-xs sm:text-sm text-base-content">{t.name}</h4>
-                    <p className="text-[10px] text-base-content/60">{t.role} • {t.location}</p>
-                  </div>
-                </div>
-
-                <div className="flex items-center text-amber-400">
-                  {[...Array(t.rating)].map((_, i) => (
-                    <FiStar key={i} className="w-3 h-3 fill-current" />
-                  ))}
+              <div className="pt-4 border-t border-base-200 flex items-center gap-3">
+                <img
+                  src={t.photo}
+                  alt={t.name}
+                  className="w-11 h-11 rounded-full object-cover ring-2 ring-brand-500/20"
+                />
+                <div className="flex flex-col">
+                  <span className="font-bold text-xs sm:text-sm text-base-content">{t.name}</span>
+                  <span className="text-[11px] text-base-content/60 font-medium">
+                    {t.role} • {t.location}
+                  </span>
                 </div>
               </div>
             </div>
@@ -92,4 +95,3 @@ export default function TestimonialsSection() {
     </section>
   );
 }
-

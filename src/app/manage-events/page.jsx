@@ -16,6 +16,7 @@ import {
   FiAlertCircle,
   FiRefreshCw,
 } from 'react-icons/fi';
+import { HiSparkles } from 'react-icons/hi2';
 import { TableRowSkeleton } from '@/components/LoadingSkeleton';
 import Swal from 'sweetalert2';
 import { toast } from 'react-toastify';
@@ -110,6 +111,7 @@ function ManageEventsContent() {
     e.preventDefault();
 
     if (!editFormData.title.trim() || !editFormData.location.trim() || !editFormData.description.trim()) {
+      toast.error('Title, location, and description cannot be empty.');
       Swal.fire({
         icon: 'warning',
         title: 'Validation Error',
@@ -121,6 +123,7 @@ function ManageEventsContent() {
     if (editFormData.eventDate) {
       const selected = new Date(editFormData.eventDate);
       if (selected <= new Date()) {
+        toast.error('Event date must be in the future.');
         Swal.fire({
           icon: 'error',
           title: 'Invalid Date',
@@ -161,6 +164,8 @@ function ManageEventsContent() {
         )
       );
 
+      toast.success('✨ Event details updated successfully!');
+
       Swal.fire({
         icon: 'success',
         title: 'Event Updated!',
@@ -171,6 +176,7 @@ function ManageEventsContent() {
 
       closeEditModal();
     } catch (err) {
+      toast.error(err.message || 'Update failed');
       Swal.fire({
         icon: 'error',
         title: 'Update Error',
@@ -192,8 +198,8 @@ function ManageEventsContent() {
       showCancelButton: true,
       confirmButtonText: 'Yes, Delete',
       cancelButtonText: 'Keep Event',
-      confirmButtonColor: '#e11d48',
-      cancelButtonColor: '#6b7280',
+      confirmButtonColor: '#ef4444',
+      cancelButtonColor: '#64748b',
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
@@ -209,7 +215,7 @@ function ManageEventsContent() {
 
           setEvents((prev) => prev.filter((ev) => (ev._id || ev.id) !== eventId));
 
-          toast.success('Event deleted successfully.');
+          toast.success('🗑️ Event deleted successfully.');
         } catch (err) {
           toast.error(err.message || 'Failed to delete event');
         }
@@ -224,15 +230,15 @@ function ManageEventsContent() {
   })();
 
   return (
-    <div className="py-10 sm:py-16 px-4 bg-base-100 min-h-screen">
+    <div className="py-12 sm:py-16 px-4 bg-base-100 min-h-screen">
       <div className="max-w-7xl mx-auto space-y-6">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-base-200 pb-5">
-          <div>
-            <span className="text-xs font-bold uppercase tracking-wider text-emerald-600">
+          <div className="space-y-1">
+            <span className="text-xs font-bold uppercase tracking-wider text-brand-600">
               Organizer Workspace
             </span>
-            <h1 className="text-2xl sm:text-3xl font-black text-base-content tracking-tight">
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-base-content tracking-tight">
               Manage My Community Events
             </h1>
             <p className="text-xs sm:text-sm text-base-content/60">
@@ -243,24 +249,24 @@ function ManageEventsContent() {
           <div className="flex items-center gap-2 self-start sm:self-auto">
             <button
               onClick={fetchMyEvents}
-              className="p-2 rounded-xl border border-base-300 hover:bg-base-200 transition-colors"
+              className="p-2.5 rounded-2xl border border-base-300 hover:bg-base-200 transition-colors"
               title="Refresh"
             >
               <FiRefreshCw className="w-4 h-4 text-base-content/70" />
             </button>
             <Link
               href="/create-event"
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-sm transition-all"
+              className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-2xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs shadow-soft transition-all"
             >
               <FiPlusCircle className="w-4 h-4" />
-              <span>Create Event</span>
+              <span>Host New Event</span>
             </Link>
           </div>
         </div>
 
         {/* Content Table / Cards */}
         {loading ? (
-          <div className="bg-base-100 rounded-2xl border border-base-300 overflow-hidden">
+          <div className="bg-base-100 rounded-3xl border border-base-300 overflow-hidden shadow-soft">
             <table className="w-full text-left">
               <tbody>
                 {[...Array(4)].map((_, i) => (
@@ -284,24 +290,24 @@ function ManageEventsContent() {
             </div>
             <Link
               href="/create-event"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 text-white text-xs font-bold shadow-md hover:bg-emerald-700 transition-all"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-brand-600 text-white text-xs font-bold shadow-soft hover:bg-brand-700 transition-all"
             >
               <FiPlusCircle className="w-4 h-4" />
               <span>Create Your First Event</span>
             </Link>
           </div>
         ) : (
-          <div className="bg-base-100 rounded-2xl border border-base-300 overflow-hidden shadow-sm">
+          <div className="bg-base-100 rounded-3xl border border-base-300 overflow-hidden shadow-soft">
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs sm:text-sm">
                 <thead className="bg-base-200/70 border-b border-base-300 text-base-content/70 uppercase text-[11px] font-bold tracking-wider">
                   <tr>
-                    <th className="py-3.5 px-4">Event Details</th>
-                    <th className="py-3.5 px-4">Category</th>
-                    <th className="py-3.5 px-4">Date & Time</th>
-                    <th className="py-3.5 px-4">Location</th>
-                    <th className="py-3.5 px-4">Volunteers</th>
-                    <th className="py-3.5 px-4 text-right">Actions</th>
+                    <th className="py-4 px-5">Event Details</th>
+                    <th className="py-4 px-5">Category</th>
+                    <th className="py-4 px-5">Date & Time</th>
+                    <th className="py-4 px-5">Location</th>
+                    <th className="py-4 px-5">Volunteers</th>
+                    <th className="py-4 px-5 text-right">Actions</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-base-200">
@@ -325,7 +331,7 @@ function ManageEventsContent() {
                         className="hover:bg-base-200/40 transition-colors"
                       >
                         {/* Event Details */}
-                        <td className="py-4 px-4">
+                        <td className="py-4 px-5">
                           <div className="flex items-center gap-3">
                             <img
                               src={
@@ -333,10 +339,10 @@ function ManageEventsContent() {
                                 'https://images.unsplash.com/photo-1593113598332-cd288d649433?auto=format&fit=crop&w=256&q=80'
                               }
                               alt={ev.title}
-                              className="w-12 h-12 rounded-xl object-cover flex-shrink-0 bg-base-300"
+                              className="w-12 h-12 rounded-2xl object-cover flex-shrink-0 bg-base-300"
                             />
                             <div className="max-w-xs">
-                              <h4 className="font-bold text-base-content line-clamp-1 hover:text-emerald-600 transition-colors">
+                              <h4 className="font-bold text-base-content line-clamp-1 hover:text-brand-600 transition-colors">
                                 <Link href={`/events/${eventId}`}>{ev.title}</Link>
                               </h4>
                               <p className="text-[11px] text-base-content/60 line-clamp-1">
@@ -347,25 +353,25 @@ function ManageEventsContent() {
                         </td>
 
                         {/* Category */}
-                        <td className="py-4 px-4 whitespace-nowrap">
-                          <span className="px-2.5 py-1 rounded-md text-[11px] font-bold bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-300/40">
+                        <td className="py-4 px-5 whitespace-nowrap">
+                          <span className="px-3 py-1 rounded-full text-[11px] font-bold bg-brand-50 dark:bg-brand-950/60 text-brand-700 dark:text-brand-300 border border-brand-300/40">
                             {ev.eventType}
                           </span>
                         </td>
 
                         {/* Date */}
-                        <td className="py-4 px-4 whitespace-nowrap font-medium text-base-content/80">
+                        <td className="py-4 px-5 whitespace-nowrap font-medium text-base-content/80">
                           {dateFormatted}
                         </td>
 
                         {/* Location */}
-                        <td className="py-4 px-4 text-base-content/70 max-w-[160px] truncate">
+                        <td className="py-4 px-5 text-base-content/70 max-w-[160px] truncate">
                           {ev.location}
                         </td>
 
                         {/* Volunteers */}
-                        <td className="py-4 px-4 whitespace-nowrap">
-                          <span className="inline-flex items-center gap-1 font-bold text-emerald-600">
+                        <td className="py-4 px-5 whitespace-nowrap">
+                          <span className="inline-flex items-center gap-1 font-bold text-brand-600">
                             <FiUsers className="w-3.5 h-3.5" />
                             <span>{ev.joinedCount || 0}</span>
                             <span className="text-[10px] text-base-content/40 font-normal">
@@ -375,11 +381,11 @@ function ManageEventsContent() {
                         </td>
 
                         {/* Actions */}
-                        <td className="py-4 px-4 text-right whitespace-nowrap">
-                          <div className="flex items-center justify-end gap-1.5">
+                        <td className="py-4 px-5 text-right whitespace-nowrap">
+                          <div className="flex items-center justify-end gap-2">
                             <Link
                               href={`/events/${eventId}`}
-                              className="p-1.5 rounded-lg border border-base-300 hover:bg-base-200 text-base-content/70 transition-colors"
+                              className="p-2 rounded-xl border border-base-300 hover:bg-base-200 text-base-content/70 transition-colors"
                               title="View Public Page"
                             >
                               <FiEye className="w-4 h-4" />
@@ -387,7 +393,7 @@ function ManageEventsContent() {
 
                             <button
                               onClick={() => openEditModal(ev)}
-                              className="p-1.5 rounded-lg border border-blue-500/30 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-950/30 transition-colors"
+                              className="p-2 rounded-xl border border-brand-500/30 text-brand-600 hover:bg-brand-50 dark:hover:bg-brand-950/30 transition-colors"
                               title="Update Event"
                             >
                               <FiEdit3 className="w-4 h-4" />
@@ -395,7 +401,7 @@ function ManageEventsContent() {
 
                             <button
                               onClick={() => handleDelete(ev)}
-                              className="p-1.5 rounded-lg border border-red-500/30 text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30 transition-colors"
+                              className="p-2 rounded-xl border border-rose-500/30 text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/30 transition-colors"
                               title="Delete Event"
                             >
                               <FiTrash2 className="w-4 h-4" />
@@ -411,57 +417,44 @@ function ManageEventsContent() {
           </div>
         )}
 
-        {/* Update Event Modal */}
+        {/* Edit Modal */}
         {editingEvent && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in-up">
-            <div className="bg-base-100 rounded-3xl border border-base-300 shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6 sm:p-8 space-y-5">
+          <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto animate-in fade-in duration-200">
+            <div className="bg-base-100 rounded-3xl border border-base-300 max-w-xl w-full p-6 sm:p-8 space-y-5 shadow-2xl relative max-h-[90vh] overflow-y-auto">
               <div className="flex items-center justify-between border-b border-base-200 pb-3">
                 <div className="flex items-center gap-2">
-                  <FiEdit3 className="w-5 h-5 text-emerald-600" />
-                  <h3 className="font-black text-lg text-base-content">
-                    Update Community Event
+                  <FiEdit3 className="w-5 h-5 text-brand-600" />
+                  <h3 className="font-extrabold text-base sm:text-lg text-base-content">
+                    Update Event Details
                   </h3>
                 </div>
                 <button
                   onClick={closeEditModal}
-                  className="p-1.5 rounded-lg hover:bg-base-200 text-base-content/60"
+                  className="p-1 rounded-xl text-base-content/50 hover:text-base-content hover:bg-base-200 transition-colors"
                 >
                   <FiX className="w-5 h-5" />
                 </button>
               </div>
 
               <form onSubmit={handleUpdateSubmit} className="space-y-4 text-xs sm:text-sm">
-                {/* Title */}
                 <div className="space-y-1">
-                  <label className="font-bold text-base-content/70 uppercase text-[11px]">
-                    Event Title *
-                  </label>
+                  <label className="font-bold text-base-content/80">Event Title *</label>
                   <input
                     type="text"
                     value={editFormData.title}
-                    onChange={(e) =>
-                      setEditFormData({ ...editFormData, title: e.target.value })
-                    }
-                    className="w-full px-3.5 py-2 rounded-xl bg-base-100 border border-base-300 focus:border-emerald-500 focus:outline-none"
+                    onChange={(e) => setEditFormData({ ...editFormData, title: e.target.value })}
+                    className="w-full px-3.5 py-2.5 rounded-2xl bg-base-200/50 border border-base-300 focus:border-brand-500 focus:outline-none"
                     required
                   />
                 </div>
 
-                {/* Category & Attendees */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="grid grid-cols-2 gap-3">
                   <div className="space-y-1">
-                    <label className="font-bold text-base-content/70 uppercase text-[11px]">
-                      Category *
-                    </label>
+                    <label className="font-bold text-base-content/80">Category</label>
                     <select
                       value={editFormData.eventType}
-                      onChange={(e) =>
-                        setEditFormData({
-                          ...editFormData,
-                          eventType: e.target.value,
-                        })
-                      }
-                      className="w-full px-3.5 py-2 rounded-xl bg-base-100 border border-base-300 focus:border-emerald-500 focus:outline-none"
+                      onChange={(e) => setEditFormData({ ...editFormData, eventType: e.target.value })}
+                      className="w-full px-3 py-2.5 rounded-2xl bg-base-200/50 border border-base-300 focus:border-brand-500 focus:outline-none cursor-pointer"
                     >
                       {categories.map((c) => (
                         <option key={c} value={c}>
@@ -472,117 +465,86 @@ function ManageEventsContent() {
                   </div>
 
                   <div className="space-y-1">
-                    <label className="font-bold text-base-content/70 uppercase text-[11px]">
-                      Volunteer Goal
-                    </label>
+                    <label className="font-bold text-base-content/80">Target Volunteers</label>
                     <input
                       type="number"
                       value={editFormData.expectedAttendees}
                       onChange={(e) =>
-                        setEditFormData({
-                          ...editFormData,
-                          expectedAttendees: e.target.value,
-                        })
+                        setEditFormData({ ...editFormData, expectedAttendees: e.target.value })
                       }
-                      min="1"
-                      className="w-full px-3.5 py-2 rounded-xl bg-base-100 border border-base-300 focus:border-emerald-500 focus:outline-none"
+                      className="w-full px-3.5 py-2.5 rounded-2xl bg-base-200/50 border border-base-300 focus:border-brand-500 focus:outline-none"
                     />
                   </div>
                 </div>
 
-                {/* Location & Date */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div className="space-y-1">
-                    <label className="font-bold text-base-content/70 uppercase text-[11px]">
-                      Location *
-                    </label>
-                    <input
-                      type="text"
-                      value={editFormData.location}
-                      onChange={(e) =>
-                        setEditFormData({
-                          ...editFormData,
-                          location: e.target.value,
-                        })
-                      }
-                      className="w-full px-3.5 py-2 rounded-xl bg-base-100 border border-base-300 focus:border-emerald-500 focus:outline-none"
-                      required
-                    />
-                  </div>
-
-                  <div className="space-y-1">
-                    <label className="font-bold text-base-content/70 uppercase text-[11px]">
-                      Event Date & Time (Future) *
-                    </label>
+                    <label className="font-bold text-base-content/80">Date & Time *</label>
                     <input
                       type="datetime-local"
                       min={todayStr}
                       value={editFormData.eventDate}
                       onChange={(e) =>
-                        setEditFormData({
-                          ...editFormData,
-                          eventDate: e.target.value,
-                        })
+                        setEditFormData({ ...editFormData, eventDate: e.target.value })
                       }
-                      className="w-full px-3.5 py-2 rounded-xl bg-base-100 border border-base-300 focus:border-emerald-500 focus:outline-none"
+                      className="w-full px-3.5 py-2.5 rounded-2xl bg-base-200/50 border border-base-300 focus:border-brand-500 focus:outline-none"
+                      required
+                    />
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="font-bold text-base-content/80">Location *</label>
+                    <input
+                      type="text"
+                      value={editFormData.location}
+                      onChange={(e) =>
+                        setEditFormData({ ...editFormData, location: e.target.value })
+                      }
+                      className="w-full px-3.5 py-2.5 rounded-2xl bg-base-200/50 border border-base-300 focus:border-brand-500 focus:outline-none"
                       required
                     />
                   </div>
                 </div>
 
-                {/* Thumbnail */}
                 <div className="space-y-1">
-                  <label className="font-bold text-base-content/70 uppercase text-[11px]">
-                    Thumbnail URL
-                  </label>
+                  <label className="font-bold text-base-content/80">Thumbnail Image URL</label>
                   <input
                     type="url"
                     value={editFormData.thumbnail}
                     onChange={(e) =>
-                      setEditFormData({
-                        ...editFormData,
-                        thumbnail: e.target.value,
-                      })
+                      setEditFormData({ ...editFormData, thumbnail: e.target.value })
                     }
-                    className="w-full px-3.5 py-2 rounded-xl bg-base-100 border border-base-300 focus:border-emerald-500 focus:outline-none"
+                    className="w-full px-3.5 py-2.5 rounded-2xl bg-base-200/50 border border-base-300 focus:border-brand-500 focus:outline-none"
                   />
                 </div>
 
-                {/* Description */}
                 <div className="space-y-1">
-                  <label className="font-bold text-base-content/70 uppercase text-[11px]">
-                    Description & Plan *
-                  </label>
+                  <label className="font-bold text-base-content/80">Description & Instructions *</label>
                   <textarea
-                    rows={4}
+                    rows="4"
                     value={editFormData.description}
                     onChange={(e) =>
-                      setEditFormData({
-                        ...editFormData,
-                        description: e.target.value,
-                      })
+                      setEditFormData({ ...editFormData, description: e.target.value })
                     }
-                    className="w-full p-3 rounded-xl bg-base-100 border border-base-300 focus:border-emerald-500 focus:outline-none leading-relaxed"
+                    className="w-full px-3.5 py-2.5 rounded-2xl bg-base-200/50 border border-base-300 focus:border-brand-500 focus:outline-none resize-y"
                     required
                   ></textarea>
                 </div>
 
-                {/* Footer Buttons */}
-                <div className="flex items-center justify-end gap-2.5 pt-4 border-t border-base-200">
+                <div className="flex items-center justify-end gap-3 pt-3 border-t border-base-200">
                   <button
                     type="button"
                     onClick={closeEditModal}
-                    className="px-4 py-2 rounded-xl border border-base-300 text-xs font-semibold hover:bg-base-200"
+                    className="px-4 py-2.5 rounded-2xl border border-base-300 hover:bg-base-200 font-semibold"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
                     disabled={updating}
-                    className="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow flex items-center gap-1.5"
+                    className="px-6 py-2.5 rounded-2xl bg-brand-600 hover:bg-brand-700 text-white font-bold shadow-soft"
                   >
-                    <FiCheck className="w-4 h-4" />
-                    <span>{updating ? 'Saving Changes...' : 'Save Changes'}</span>
+                    {updating ? 'Saving Changes...' : 'Save & Sync'}
                   </button>
                 </div>
               </form>
@@ -601,4 +563,3 @@ export default function ManageEventsPage() {
     </PrivateRoute>
   );
 }
-

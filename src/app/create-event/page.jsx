@@ -14,6 +14,8 @@ import {
   FiArrowLeft,
   FiEye,
 } from 'react-icons/fi';
+import { HiSparkles } from 'react-icons/hi2';
+import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
 import Link from 'next/link';
 
@@ -37,7 +39,6 @@ function CreateEventForm() {
   // Calculate minimum date string for today/tomorrow to prevent past dates
   const todayStr = (() => {
     const now = new Date();
-    // Add 1 hour or set to local ISO format for datetime-local
     now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
     return now.toISOString().slice(0, 16);
   })();
@@ -71,6 +72,7 @@ function CreateEventForm() {
   const handleSelectPreset = (url) => {
     setFormData((prev) => ({ ...prev, thumbnail: url }));
     setImagePreview(url);
+    toast.info('📷 Preset photo selected', { autoClose: 1000, hideProgressBar: true });
   };
 
   const handleSubmit = async (e) => {
@@ -78,14 +80,17 @@ function CreateEventForm() {
 
     // Field validation
     if (!formData.title.trim()) {
+      toast.error('Please enter an event title.');
       Swal.fire({ icon: 'warning', title: 'Missing Title', text: 'Please enter an event title.' });
       return;
     }
     if (!formData.location.trim()) {
+      toast.error('Please enter the event location/neighborhood.');
       Swal.fire({ icon: 'warning', title: 'Missing Location', text: 'Please enter the event location/neighborhood.' });
       return;
     }
     if (!formData.eventDate) {
+      toast.error('Please select an upcoming event date.');
       Swal.fire({ icon: 'warning', title: 'Missing Date', text: 'Please select an event date.' });
       return;
     }
@@ -94,6 +99,7 @@ function CreateEventForm() {
     const selectedDate = new Date(formData.eventDate);
     const now = new Date();
     if (selectedDate <= now) {
+      toast.error('Event date must be in the future.');
       Swal.fire({
         icon: 'error',
         title: 'Invalid Date',
@@ -103,6 +109,7 @@ function CreateEventForm() {
     }
 
     if (!formData.description.trim()) {
+      toast.error('Please describe the event and volunteer responsibilities.');
       Swal.fire({ icon: 'warning', title: 'Missing Description', text: 'Please describe the event and volunteer responsibilities.' });
       return;
     }
@@ -130,17 +137,22 @@ function CreateEventForm() {
         throw new Error(data.message || 'Failed to create event');
       }
 
+      toast.success('🎉 Event created successfully! Redirecting to upcoming directory...', {
+        icon: '🚀',
+      });
+
       Swal.fire({
         icon: 'success',
         title: 'Event Created Successfully!',
         text: 'Your social service event is now live and published to the community.',
-        timer: 2200,
+        timer: 2000,
         showConfirmButton: false,
       });
 
       // Redirect user to Upcoming Events page as required
       router.push('/events');
     } catch (err) {
+      toast.error(err.message || 'Event creation error');
       Swal.fire({
         icon: 'error',
         title: 'Event Creation Error',
@@ -152,237 +164,279 @@ function CreateEventForm() {
   };
 
   return (
-    <div className="py-10 sm:py-16 px-4 bg-base-100 min-h-screen">
-      <div className="max-w-3xl mx-auto space-y-8">
-        {/* Header */}
-        <div className="border-b border-base-200 pb-5 space-y-2">
-          <Link
-            href="/events"
-            className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-600 hover:text-emerald-700 transition-colors"
-          >
-            <FiArrowLeft className="w-4 h-4" />
-            <span>Back to Events</span>
-          </Link>
-          <div className="flex items-center gap-2.5">
-            <div className="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-300 flex items-center justify-center">
-              <FiPlusCircle className="w-5 h-5" />
-            </div>
-            <div>
-              <h1 className="text-2xl sm:text-3xl font-black text-base-content tracking-tight">
-                Create a Community Service Event
-              </h1>
-              <p className="text-xs sm:text-sm text-base-content/60">
-                Mobilize volunteers in your neighborhood to create lasting social impact.
-              </p>
-            </div>
+    <div className="py-12 sm:py-16 px-4 bg-base-100 min-h-screen">
+      <div className="max-w-6xl mx-auto space-y-8">
+        {/* Header Breadcrumb */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-base-200 pb-6">
+          <div className="space-y-2">
+            <Link
+              href="/events"
+              className="inline-flex items-center gap-1.5 text-xs font-bold text-brand-600 hover:text-brand-700 transition-colors"
+            >
+              <FiArrowLeft className="w-3.5 h-3.5" />
+              <span>Back to Directory</span>
+            </Link>
+            <h1 className="text-2xl sm:text-4xl font-extrabold text-base-content tracking-tight">
+              Host a Community Service Event
+            </h1>
+            <p className="text-xs sm:text-sm text-base-content/70">
+              Mobilize local volunteers in Dhaka, Chittagong, Sylhet or your local area for collective goodwill.
+            </p>
+          </div>
+
+          <div className="px-3.5 py-1.5 rounded-full bg-brand-50 dark:bg-brand-950/60 border border-brand-200 dark:border-brand-800 text-brand-700 dark:text-brand-300 text-xs font-semibold self-start sm:self-auto">
+            Logged in as: <span className="font-bold">{user?.name || user?.email}</span>
           </div>
         </div>
 
-        {/* Form Container */}
-        <div className="bg-base-100 rounded-2xl border border-base-300 p-6 sm:p-8 shadow-sm">
-          <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Creator Badge info */}
-            <div className="flex items-center gap-3 p-3.5 rounded-xl bg-base-200/50 border border-base-300 text-xs">
-              <img
-                src={user?.photoURL || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=256&q=80'}
-                alt={user?.name}
-                className="w-8 h-8 rounded-full object-cover"
-              />
-              <div>
-                <p className="font-bold text-base-content">
-                  Creating as: <span className="text-emerald-600">{user?.name}</span>
-                </p>
-                <p className="text-base-content/60">
-                  Organizer Email: <span className="font-mono">{user?.email}</span> (attached automatically)
-                </p>
-              </div>
-            </div>
-
-            {/* Event Title */}
-            <div className="space-y-1.5">
-              <label className="text-xs font-bold uppercase tracking-wider text-base-content/70 flex items-center gap-1.5">
-                <FiTag className="text-emerald-500" />
-                <span>Event Title *</span>
-              </label>
-              <input
-                type="text"
-                name="title"
-                value={formData.title}
-                onChange={handleChange}
-                placeholder="e.g. Winter Clothes Distribution for Underprivileged Families"
-                className="w-full px-4 py-2.5 rounded-xl bg-base-100 border border-base-300 focus:border-emerald-500 focus:outline-none text-xs sm:text-sm font-medium"
-                required
-              />
-            </div>
-
-            {/* Event Type & Expected Attendees */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {/* 2-Column Form & Live Preview Layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          {/* Main Form (7 cols) */}
+          <div className="lg:col-span-7 bg-base-100 rounded-3xl border border-base-300 p-6 sm:p-8 shadow-soft space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-5">
+              {/* Event Title */}
               <div className="space-y-1.5">
-                <label className="text-xs font-bold uppercase tracking-wider text-base-content/70 flex items-center gap-1.5">
-                  <FiTag className="text-emerald-500" />
-                  <span>Event Type *</span>
-                </label>
-                <select
-                  name="eventType"
-                  value={formData.eventType}
-                  onChange={handleChange}
-                  className="w-full px-4 py-2.5 rounded-xl bg-base-100 border border-base-300 focus:border-emerald-500 focus:outline-none text-xs sm:text-sm cursor-pointer"
-                  required
-                >
-                  {categories.map((cat) => (
-                    <option key={cat} value={cat}>
-                      {cat}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="space-y-1.5">
-                <label className="text-xs font-bold uppercase tracking-wider text-base-content/70 flex items-center gap-1.5">
-                  <FiUsers className="text-emerald-500" />
-                  <span>Target Volunteers</span>
-                </label>
-                <input
-                  type="number"
-                  name="expectedAttendees"
-                  value={formData.expectedAttendees}
-                  onChange={handleChange}
-                  min="1"
-                  max="5000"
-                  placeholder="e.g. 50"
-                  className="w-full px-4 py-2.5 rounded-xl bg-base-100 border border-base-300 focus:border-emerald-500 focus:outline-none text-xs sm:text-sm"
-                />
-              </div>
-            </div>
-
-            {/* Location & Date */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="space-y-1.5">
-                <label className="text-xs font-bold uppercase tracking-wider text-base-content/70 flex items-center gap-1.5">
-                  <FiMapPin className="text-emerald-500" />
-                  <span>Location / Area *</span>
+                <label className="text-xs font-bold uppercase tracking-wider text-base-content/80 flex items-center gap-1.5">
+                  <FiFileText className="w-4 h-4 text-brand-500" />
+                  <span>Event Title *</span>
                 </label>
                 <input
                   type="text"
-                  name="location"
-                  value={formData.location}
+                  name="title"
+                  value={formData.title}
                   onChange={handleChange}
-                  placeholder="e.g. Mirpur 10 Community Center, Dhaka"
-                  className="w-full px-4 py-2.5 rounded-xl bg-base-100 border border-base-300 focus:border-emerald-500 focus:outline-none text-xs sm:text-sm"
+                  placeholder="e.g. Winter Clothes Distribution – Mirpur 10, Dhaka"
+                  className="w-full px-4 py-2.5 rounded-2xl bg-base-200/50 border border-base-300 focus:border-brand-500 focus:bg-base-100 focus:outline-none focus:ring-2 focus:ring-brand-500/20 text-xs sm:text-sm transition-all"
                   required
                 />
               </div>
 
-              <div className="space-y-1.5">
-                <label className="text-xs font-bold uppercase tracking-wider text-base-content/70 flex items-center gap-1.5">
-                  <FiCalendar className="text-emerald-500" />
-                  <span>Event Date & Time (Future Only) *</span>
+              {/* Event Type & Expected Attendees */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold uppercase tracking-wider text-base-content/80 flex items-center gap-1.5">
+                    <FiTag className="w-4 h-4 text-sky-500" />
+                    <span>Event Type *</span>
+                  </label>
+                  <select
+                    name="eventType"
+                    value={formData.eventType}
+                    onChange={handleChange}
+                    className="w-full px-4 py-2.5 rounded-2xl bg-base-200/50 border border-base-300 focus:border-brand-500 focus:bg-base-100 focus:outline-none focus:ring-2 focus:ring-brand-500/20 text-xs sm:text-sm cursor-pointer"
+                  >
+                    {categories.map((cat) => (
+                      <option key={cat} value={cat}>
+                        {cat}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold uppercase tracking-wider text-base-content/80 flex items-center gap-1.5">
+                    <FiUsers className="w-4 h-4 text-warm-500" />
+                    <span>Target Volunteers</span>
+                  </label>
+                  <input
+                    type="number"
+                    name="expectedAttendees"
+                    min="5"
+                    max="1000"
+                    value={formData.expectedAttendees}
+                    onChange={handleChange}
+                    placeholder="50"
+                    className="w-full px-4 py-2.5 rounded-2xl bg-base-200/50 border border-base-300 focus:border-brand-500 focus:bg-base-100 focus:outline-none focus:ring-2 focus:ring-brand-500/20 text-xs sm:text-sm transition-all"
+                  />
+                </div>
+              </div>
+
+              {/* Date & Location */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold uppercase tracking-wider text-base-content/80 flex items-center gap-1.5">
+                    <FiCalendar className="w-4 h-4 text-brand-500" />
+                    <span>Event Date & Time *</span>
+                  </label>
+                  <input
+                    type="datetime-local"
+                    name="eventDate"
+                    min={todayStr}
+                    value={formData.eventDate}
+                    onChange={handleChange}
+                    className="w-full px-4 py-2.5 rounded-2xl bg-base-200/50 border border-base-300 focus:border-brand-500 focus:bg-base-100 focus:outline-none focus:ring-2 focus:ring-brand-500/20 text-xs sm:text-sm transition-all"
+                    required
+                  />
+                  <p className="text-[10px] text-base-content/50">
+                    Must be in the future (past dates are strictly disabled).
+                  </p>
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold uppercase tracking-wider text-base-content/80 flex items-center gap-1.5">
+                    <FiMapPin className="w-4 h-4 text-rose-500" />
+                    <span>Location *</span>
+                  </label>
+                  <input
+                    type="text"
+                    name="location"
+                    value={formData.location}
+                    onChange={handleChange}
+                    placeholder="e.g. Mirpur 10 Circle, Dhaka"
+                    className="w-full px-4 py-2.5 rounded-2xl bg-base-200/50 border border-base-300 focus:border-brand-500 focus:bg-base-100 focus:outline-none focus:ring-2 focus:ring-brand-500/20 text-xs sm:text-sm transition-all"
+                    required
+                  />
+                </div>
+              </div>
+
+              {/* Thumbnail Image URL & Presets */}
+              <div className="space-y-2">
+                <label className="text-xs font-bold uppercase tracking-wider text-base-content/80 flex items-center gap-1.5">
+                  <FiImage className="w-4 h-4 text-sky-500" />
+                  <span>Thumbnail Image URL</span>
                 </label>
                 <input
-                  type="datetime-local"
-                  name="eventDate"
-                  min={todayStr}
-                  value={formData.eventDate}
+                  type="url"
+                  name="thumbnail"
+                  value={formData.thumbnail}
                   onChange={handleChange}
-                  className="w-full px-4 py-2.5 rounded-xl bg-base-100 border border-base-300 focus:border-emerald-500 focus:outline-none text-xs sm:text-sm cursor-pointer"
-                  required
+                  placeholder="https://images.unsplash.com/..."
+                  className="w-full px-4 py-2.5 rounded-2xl bg-base-200/50 border border-base-300 focus:border-brand-500 focus:bg-base-100 focus:outline-none focus:ring-2 focus:ring-brand-500/20 text-xs sm:text-sm transition-all"
                 />
-                <span className="text-[10px] text-base-content/50">
-                  Ensure no past date is selected.
-                </span>
-              </div>
-            </div>
 
-            {/* Thumbnail Image URL */}
-            <div className="space-y-2">
-              <label className="text-xs font-bold uppercase tracking-wider text-base-content/70 flex items-center gap-1.5">
-                <FiImage className="text-emerald-500" />
-                <span>Thumbnail Image URL</span>
-              </label>
-              <input
-                type="url"
-                name="thumbnail"
-                value={formData.thumbnail}
-                onChange={handleChange}
-                placeholder="https://images.unsplash.com/..."
-                className="w-full px-4 py-2.5 rounded-xl bg-base-100 border border-base-300 focus:border-emerald-500 focus:outline-none text-xs sm:text-sm"
-              />
-
-              {/* Preset selection helpers */}
-              <div className="flex items-center gap-2 flex-wrap pt-1">
-                <span className="text-[11px] text-base-content/50">Quick presets:</span>
-                {presetImages.map((p, i) => (
-                  <button
-                    key={i}
-                    type="button"
-                    onClick={() => handleSelectPreset(p.url)}
-                    className="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-base-200 hover:bg-emerald-100 dark:hover:bg-emerald-950 text-base-content/80 transition-colors"
-                  >
-                    {p.label}
-                  </button>
-                ))}
-              </div>
-
-              {/* Image Preview */}
-              {imagePreview && (
-                <div className="mt-3 p-2 bg-base-200/50 rounded-xl border border-base-300 flex items-center gap-3">
-                  <img
-                    src={imagePreview}
-                    alt="Preview"
-                    className="w-20 h-14 rounded-lg object-cover"
-                    onError={(e) => {
-                      e.target.onerror = null;
-                      e.target.src = presetImages[0].url;
-                    }}
-                  />
-                  <div className="text-xs">
-                    <span className="font-bold flex items-center gap-1 text-emerald-600">
-                      <FiEye /> Thumbnail Preview Loaded
-                    </span>
-                    <span className="text-base-content/60 text-[10px] truncate max-w-xs block">
-                      {imagePreview}
-                    </span>
+                {/* Preset Image Chooser */}
+                <div className="pt-1">
+                  <span className="text-[11px] font-semibold text-base-content/60 block mb-1.5">
+                    Or select a community theme preset photo:
+                  </span>
+                  <div className="flex flex-wrap gap-1.5">
+                    {presetImages.map((preset, idx) => (
+                      <button
+                        key={idx}
+                        type="button"
+                        onClick={() => handleSelectPreset(preset.url)}
+                        className={`text-[11px] px-3 py-1 rounded-full border transition-all ${
+                          formData.thumbnail === preset.url
+                            ? 'bg-brand-600 text-white border-brand-600 shadow-sm'
+                            : 'bg-base-200/80 hover:bg-base-300 border-base-300 text-base-content/80'
+                        }`}
+                      >
+                        {preset.label}
+                      </button>
+                    ))}
                   </div>
                 </div>
-              )}
+              </div>
+
+              {/* Description & Volunteer Instructions */}
+              <div className="space-y-1.5">
+                <label className="text-xs font-bold uppercase tracking-wider text-base-content/80 flex items-center gap-1.5">
+                  <FiFileText className="w-4 h-4 text-warm-500" />
+                  <span>Description & Guidelines *</span>
+                </label>
+                <textarea
+                  name="description"
+                  rows="4"
+                  value={formData.description}
+                  onChange={handleChange}
+                  placeholder="Describe your community service project, goals, what volunteers should bring, and meeting instructions..."
+                  className="w-full px-4 py-3 rounded-2xl bg-base-200/50 border border-base-300 focus:border-brand-500 focus:bg-base-100 focus:outline-none focus:ring-2 focus:ring-brand-500/20 text-xs sm:text-sm transition-all resize-y"
+                  required
+                ></textarea>
+              </div>
+
+              {/* Submit CTA */}
+              <div className="pt-2">
+                <button
+                  type="submit"
+                  disabled={submitting}
+                  className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-brand-600 via-indigo-600 to-sky-600 hover:from-brand-500 hover:to-sky-500 text-white font-bold text-sm shadow-soft hover:shadow-glow hover:scale-[1.01] active:scale-[0.99] transition-all duration-200 flex items-center justify-center gap-2"
+                >
+                  <FiPlusCircle className="w-4 h-4" />
+                  <span>{submitting ? 'Publishing Event...' : 'Publish Community Event'}</span>
+                </button>
+              </div>
+            </form>
+          </div>
+
+          {/* Right Column: Live Card Preview (5 cols) */}
+          <div className="lg:col-span-5 space-y-4 sticky top-24">
+            <div className="flex items-center gap-2 text-xs font-bold text-base-content/70 px-1">
+              <FiEye className="w-4 h-4 text-brand-500" />
+              <span>Live Card Preview</span>
             </div>
 
-            {/* Event Description */}
-            <div className="space-y-1.5">
-              <label className="text-xs font-bold uppercase tracking-wider text-base-content/70 flex items-center gap-1.5">
-                <FiFileText className="text-emerald-500" />
-                <span>Event Description & Volunteer Plan *</span>
-              </label>
-              <textarea
-                name="description"
-                rows={5}
-                value={formData.description}
-                onChange={handleChange}
-                placeholder="Describe the cause, what supplies volunteers will distribute or clean, meeting point instructions, and what volunteers should bring..."
-                className="w-full p-4 rounded-xl bg-base-100 border border-base-300 focus:border-emerald-500 focus:outline-none text-xs sm:text-sm leading-relaxed"
-                required
-              ></textarea>
+            {/* Preview Card */}
+            <div className="bg-base-100 rounded-3xl border border-base-300 overflow-hidden shadow-soft">
+              <div className="relative h-48 bg-base-300">
+                <img
+                  src={
+                    formData.thumbnail ||
+                    imagePreview ||
+                    presetImages[0].url
+                  }
+                  alt="Preview"
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent"></div>
+                <div className="absolute top-3 left-3">
+                  <span className="px-3 py-1 rounded-full text-xs font-bold bg-brand-600 text-white shadow-sm">
+                    {formData.eventType}
+                  </span>
+                </div>
+                <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-white text-xs font-medium">
+                  <span className="bg-slate-900/60 backdrop-blur-md px-2.5 py-1 rounded-full border border-white/10">
+                    {formData.eventDate
+                      ? new Date(formData.eventDate).toLocaleDateString('en-US', {
+                          month: 'short',
+                          day: 'numeric',
+                          year: 'numeric',
+                        })
+                      : 'Upcoming Date'}
+                  </span>
+                  <span className="bg-slate-900/60 backdrop-blur-md px-2.5 py-1 rounded-full border border-white/10">
+                    0 Joined
+                  </span>
+                </div>
+              </div>
+
+              <div className="p-5 space-y-3">
+                <h3 className="font-bold text-base text-base-content line-clamp-2">
+                  {formData.title || 'Winter Clothes Distribution – Mirpur 10, Dhaka'}
+                </h3>
+                <div className="flex items-center gap-1.5 text-xs text-base-content/70">
+                  <FiMapPin className="text-brand-500" />
+                  <span>{formData.location || 'Mirpur 10, Dhaka'}</span>
+                </div>
+                <p className="text-xs text-base-content/60 line-clamp-2 leading-relaxed">
+                  {formData.description ||
+                    'Gathering warm sweaters, jackets, and thermal blankets to protect homeless families from seasonal cold waves.'}
+                </p>
+
+                <div className="pt-3 border-t border-base-200 flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <div className="w-6 h-6 rounded-full bg-brand-600 text-white text-[10px] font-bold flex items-center justify-center">
+                      {(user?.name || 'O').charAt(0).toUpperCase()}
+                    </div>
+                    <span className="text-xs font-semibold text-base-content">
+                      {user?.name || 'Organizer'}
+                    </span>
+                  </div>
+                  <span className="text-xs font-bold text-brand-600">View Event →</span>
+                </div>
+              </div>
             </div>
 
-            {/* Submit Button */}
-            <div className="pt-4 flex items-center justify-end gap-3 border-t border-base-200">
-              <Link
-                href="/events"
-                className="px-4 py-2.5 rounded-xl border border-base-300 text-xs font-semibold hover:bg-base-200 transition-colors"
-              >
-                Cancel
-              </Link>
-
-              <button
-                type="submit"
-                disabled={submitting}
-                className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold text-xs sm:text-sm shadow-md hover:scale-[1.01] active:scale-[0.99] transition-all duration-200 flex items-center gap-2"
-              >
-                <FiPlusCircle className="w-4 h-4" />
-                <span>{submitting ? 'Publishing Event...' : 'Publish Community Event'}</span>
-              </button>
+            {/* Quick Tips */}
+            <div className="p-4 rounded-2xl bg-base-200/50 border border-base-300/80 text-xs text-base-content/70 space-y-2">
+              <p className="font-bold text-base-content flex items-center gap-1.5">
+                <HiSparkles className="w-3.5 h-3.5 text-warm-500" />
+                <span>Host Responsibility Tip</span>
+              </p>
+              <p className="leading-relaxed">
+                As creator, your account ({user?.email}) will have full authority in your Organizer Dashboard to edit event details or cancel drives if weather changes.
+              </p>
             </div>
-          </form>
+          </div>
         </div>
       </div>
     </div>
@@ -396,4 +450,3 @@ export default function CreateEventPage() {
     </PrivateRoute>
   );
 }
-

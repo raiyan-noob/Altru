@@ -12,7 +12,9 @@ import {
   FiEyeOff,
   FiArrowRight,
 } from 'react-icons/fi';
-import { FaHandsHelping, FaGoogle } from 'react-icons/fa';
+import { FaGoogle } from 'react-icons/fa';
+import { HiSparkles } from 'react-icons/hi2';
+import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
 
 function LoginForm() {
@@ -36,6 +38,7 @@ function LoginForm() {
     e.preventDefault();
 
     if (!email.trim() || !password) {
+      toast.error('Please enter both your email address and password.');
       Swal.fire({
         icon: 'warning',
         title: 'Missing Fields',
@@ -49,12 +52,12 @@ function LoginForm() {
     setSubmitting(false);
 
     if (result.success) {
+      toast.success('🎉 Welcome back! You are now logged in.', { icon: '👋' });
       router.push(redirectUrl);
     }
   };
 
   const handleGoogleLogin = async () => {
-    // Interactive Google login modal for user profile
     const { value: formValues } = await Swal.fire({
       title: 'Google One-Click Sign In',
       html:
@@ -64,7 +67,7 @@ function LoginForm() {
       focusConfirm: false,
       showCancelButton: true,
       confirmButtonText: 'Continue with Google',
-      confirmButtonColor: '#059669',
+      confirmButtonColor: '#4f46e5',
       preConfirm: () => {
         const name = document.getElementById('swal-input-name').value;
         const email = document.getElementById('swal-input-email').value;
@@ -86,6 +89,7 @@ function LoginForm() {
       setSubmitting(false);
 
       if (result.success) {
+        toast.success(`Google authentication confirmed! Welcome, ${formValues.name}.`);
         router.push(redirectUrl);
       }
     }
@@ -94,12 +98,13 @@ function LoginForm() {
   // Quick fill demo credentials
   const fillDemo = (role) => {
     if (role === 'organizer') {
-      setEmail('organizer.tanvir@gmail.com');
-      setPassword('AltruVolunteer2026!');
+      setEmail('tahmid.rahman@altru.org');
+      setPassword('AltruPass123');
     } else {
-      setEmail('volunteer@altru.org');
-      setPassword('AltruVolunteer2026!');
+      setEmail('nusrat.jahan@altru.org');
+      setPassword('AltruPass123');
     }
+    toast.info(`Filled credentials for ${role}`, { autoClose: 1000, hideProgressBar: true });
   };
 
   return (
@@ -107,15 +112,15 @@ function LoginForm() {
       <div className="w-full max-w-md space-y-6">
         {/* Brand Banner */}
         <div className="text-center space-y-2">
-          <Link href="/" className="inline-flex items-center gap-2 group">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-500 flex items-center justify-center text-white shadow-md shadow-emerald-500/25">
-              <FaHandsHelping className="w-5 h-5" />
+          <Link href="/" className="inline-flex items-center gap-2.5 group">
+            <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-brand-600 to-sky-500 flex items-center justify-center text-white shadow-glow">
+              <HiSparkles className="w-5 h-5 text-amber-200" />
             </div>
-            <span className="text-2xl font-black bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 bg-clip-text text-transparent">
+            <span className="text-2xl font-black bg-gradient-to-r from-brand-600 via-indigo-600 to-sky-500 bg-clip-text text-transparent">
               Altru
             </span>
           </Link>
-          <h1 className="text-2xl font-black text-base-content tracking-tight">
+          <h1 className="text-2xl font-extrabold text-base-content tracking-tight">
             Welcome Back, Changemaker
           </h1>
           <p className="text-xs sm:text-sm text-base-content/60">
@@ -124,7 +129,7 @@ function LoginForm() {
         </div>
 
         {/* Card */}
-        <div className="bg-base-100 rounded-3xl border border-base-300 p-6 sm:p-8 shadow-xl space-y-6">
+        <div className="bg-base-100 rounded-3xl border border-base-300 p-6 sm:p-8 shadow-soft space-y-6">
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Email Field */}
             <div className="space-y-1.5">
@@ -138,7 +143,7 @@ function LoginForm() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="name@example.com"
-                  className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-base-100 border border-base-300 focus:border-emerald-500 focus:outline-none text-xs sm:text-sm font-medium"
+                  className="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-base-200/50 border border-base-300 focus:border-brand-500 focus:bg-base-100 focus:outline-none focus:ring-2 focus:ring-brand-500/20 text-xs sm:text-sm font-medium"
                   required
                 />
               </div>
@@ -158,7 +163,7 @@ function LoginForm() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Enter your account password"
-                  className="w-full pl-10 pr-10 py-2.5 rounded-xl bg-base-100 border border-base-300 focus:border-emerald-500 focus:outline-none text-xs sm:text-sm font-medium"
+                  className="w-full pl-10 pr-10 py-2.5 rounded-2xl bg-base-200/50 border border-base-300 focus:border-brand-500 focus:bg-base-100 focus:outline-none focus:ring-2 focus:ring-brand-500/20 text-xs sm:text-sm font-medium"
                   required
                 />
                 <button
@@ -175,66 +180,66 @@ function LoginForm() {
             <button
               type="submit"
               disabled={submitting}
-              className="w-full py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold text-sm shadow-md hover:scale-[1.01] active:scale-[0.99] transition-all duration-200 flex items-center justify-center gap-2 mt-2"
+              className="w-full py-3 rounded-2xl bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 text-white font-bold text-xs sm:text-sm shadow-soft hover:shadow-glow transition-all flex items-center justify-center gap-2"
             >
               <FiLogIn className="w-4 h-4" />
-              <span>{submitting ? 'Verifying Credentials...' : 'Log In to Account'}</span>
+              <span>{submitting ? 'Authenticating...' : 'Sign In'}</span>
             </button>
           </form>
 
           {/* Divider */}
-          <div className="relative flex items-center justify-center">
-            <div className="border-t border-base-300 w-full"></div>
-            <span className="bg-base-100 px-3 text-[11px] font-bold uppercase tracking-wider text-base-content/50">
-              Or Continue With
+          <div className="relative text-center">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-base-300"></div>
+            </div>
+            <span className="relative bg-base-100 px-3 text-[11px] uppercase font-bold text-base-content/50">
+              Or Connect With
             </span>
           </div>
 
-          {/* Google Login Button */}
+          {/* Google Sign In */}
           <button
             type="button"
             onClick={handleGoogleLogin}
             disabled={submitting}
-            className="w-full py-2.5 rounded-xl border border-base-300 hover:bg-base-200 flex items-center justify-center gap-2.5 text-xs sm:text-sm font-bold text-base-content transition-all shadow-sm"
+            className="w-full py-2.5 rounded-2xl border border-base-300 hover:bg-base-200 text-base-content text-xs font-semibold flex items-center justify-center gap-2.5 transition-all shadow-sm"
           >
-            <FaGoogle className="w-4 h-4 text-red-500" />
-            <span>Sign in with Google</span>
+            <FaGoogle className="w-4 h-4 text-rose-500" />
+            <span>Continue with Google</span>
           </button>
 
-          {/* Quick Demo Credentials */}
-          <div className="p-3 bg-base-200/50 rounded-xl border border-base-300 text-xs space-y-1.5">
-            <p className="font-bold text-base-content/70 text-[11px] uppercase tracking-wider">
-              Quick Demo Fill:
-            </p>
-            <div className="flex gap-2">
+          {/* Demo Login Quick Fill */}
+          <div className="p-3 rounded-2xl bg-base-200/50 border border-base-300/70 space-y-2">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-base-content/50 block text-center">
+              Quick Demo Fill
+            </span>
+            <div className="grid grid-cols-2 gap-2">
               <button
                 type="button"
                 onClick={() => fillDemo('organizer')}
-                className="px-2.5 py-1 rounded bg-base-100 hover:bg-emerald-50 dark:hover:bg-emerald-950 border border-base-300 text-[11px] font-semibold text-emerald-700 dark:text-emerald-300"
+                className="py-1.5 px-2 rounded-xl bg-base-100 border border-base-300 hover:border-brand-500 text-[11px] font-bold text-base-content transition-all"
               >
-                Organizer Account
+                Lead Organizer
               </button>
               <button
                 type="button"
                 onClick={() => fillDemo('volunteer')}
-                className="px-2.5 py-1 rounded bg-base-100 hover:bg-emerald-50 dark:hover:bg-emerald-950 border border-base-300 text-[11px] font-semibold text-teal-700 dark:text-teal-300"
+                className="py-1.5 px-2 rounded-xl bg-base-100 border border-base-300 hover:border-brand-500 text-[11px] font-bold text-base-content transition-all"
               >
-                Volunteer Account
+                Volunteer
               </button>
             </div>
           </div>
 
-          {/* Link to Register */}
-          <p className="text-center text-xs text-base-content/70">
-            Don&apos;t have a volunteer account yet?{' '}
-            <Link
-              href="/register"
-              className="text-emerald-600 font-bold hover:underline inline-flex items-center gap-1"
-            >
-              <span>Register Here</span>
-              <FiArrowRight className="w-3 h-3" />
-            </Link>
-          </p>
+          {/* Footer Link */}
+          <div className="text-center pt-1 border-t border-base-200">
+            <p className="text-xs text-base-content/70">
+              Don&apos;t have an account yet?{' '}
+              <Link href="/register" className="font-bold text-brand-600 hover:underline">
+                Register as Volunteer →
+              </Link>
+            </p>
+          </div>
         </div>
       </div>
     </div>
@@ -246,7 +251,7 @@ export default function LoginPage() {
     <Suspense
       fallback={
         <div className="min-h-[80vh] flex items-center justify-center">
-          <div className="loading loading-spinner loading-md text-emerald-600"></div>
+          <span className="loading loading-spinner loading-lg text-brand-600"></span>
         </div>
       }
     >
@@ -254,4 +259,3 @@ export default function LoginPage() {
     </Suspense>
   );
 }
-

@@ -13,6 +13,7 @@ import {
   FiRefreshCw,
   FiHeart,
 } from 'react-icons/fi';
+import { HiSparkles } from 'react-icons/hi2';
 import { EventCardSkeleton } from '@/components/LoadingSkeleton';
 import Swal from 'sweetalert2';
 import { toast } from 'react-toastify';
@@ -61,7 +62,8 @@ function JoinedEventsContent() {
       showCancelButton: true,
       confirmButtonText: 'Yes, Cancel RSVP',
       cancelButtonText: 'Stay Joined',
-      confirmButtonColor: '#e11d48',
+      confirmButtonColor: '#ef4444',
+      cancelButtonColor: '#64748b',
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
@@ -76,7 +78,7 @@ function JoinedEventsContent() {
           }
 
           setJoinedEvents((prev) => prev.filter((ev) => ev.eventId !== eventId));
-          toast.info('You have withdrawn your volunteer RSVP.');
+          toast.info('You have withdrawn your volunteer RSVP.', { icon: 'ℹ️' });
         } catch (err) {
           toast.error(err.message || 'Error withdrawing from event');
         }
@@ -85,33 +87,33 @@ function JoinedEventsContent() {
   };
 
   return (
-    <div className="py-10 sm:py-16 px-4 bg-base-100 min-h-screen">
+    <div className="py-12 sm:py-16 px-4 bg-base-100 min-h-screen">
       <div className="max-w-7xl mx-auto space-y-6">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-base-200 pb-5">
           <div className="space-y-1">
-            <span className="text-xs font-bold uppercase tracking-wider text-emerald-600">
+            <span className="text-xs font-bold uppercase tracking-wider text-brand-600">
               Volunteer Schedule
             </span>
-            <h1 className="text-2xl sm:text-3xl font-black text-base-content tracking-tight">
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-base-content tracking-tight">
               Events You Have Joined
             </h1>
             <p className="text-xs sm:text-sm text-base-content/60">
-              Here are all the upcoming social welfare initiatives you have registered to support, sorted by event date.
+              All upcoming social welfare initiatives you have registered to support, sorted chronologically by event date.
             </p>
           </div>
 
           <div className="flex items-center gap-2 self-start sm:self-auto">
             <button
               onClick={fetchJoinedEvents}
-              className="p-2 rounded-xl border border-base-300 hover:bg-base-200 transition-colors"
+              className="p-2.5 rounded-2xl border border-base-300 hover:bg-base-200 transition-colors"
               title="Refresh"
             >
               <FiRefreshCw className="w-4 h-4 text-base-content/70" />
             </button>
             <Link
               href="/events"
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-sm transition-all"
+              className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-2xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs shadow-soft transition-all"
             >
               <FiCalendar className="w-4 h-4" />
               <span>Browse More Events</span>
@@ -129,7 +131,7 @@ function JoinedEventsContent() {
         ) : joinedEvents.length === 0 ? (
           <div className="text-center py-20 px-4 bg-base-200/40 rounded-3xl border border-base-300 space-y-4">
             <div className="w-16 h-16 rounded-2xl bg-base-300 flex items-center justify-center mx-auto text-base-content/40">
-              <FiCheckCircle className="w-8 h-8 text-emerald-500" />
+              <FiCheckCircle className="w-8 h-8 text-brand-500" />
             </div>
             <div className="space-y-1">
               <h3 className="text-lg font-bold text-base-content">
@@ -141,7 +143,7 @@ function JoinedEventsContent() {
             </div>
             <Link
               href="/events"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 text-white text-xs font-bold shadow-md hover:bg-emerald-700 transition-all"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-brand-600 text-white text-xs font-bold shadow-soft hover:bg-brand-700 transition-all"
             >
               <span>Explore Upcoming Events</span>
               <FiArrowRight className="w-4 h-4" />
@@ -177,10 +179,9 @@ function JoinedEventsContent() {
               return (
                 <div
                   key={item._id || item.id}
-                  className="bg-base-100 rounded-2xl border border-base-300 overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col justify-between"
+                  className="bg-base-100 rounded-3xl border border-base-300 overflow-hidden shadow-soft hover:shadow-xl transition-all duration-300 flex flex-col justify-between"
                 >
-                  {/* Thumbnail Banner */}
-                  <div className="relative h-44 overflow-hidden bg-base-300">
+                  <div className="relative h-48 bg-base-300">
                     <img
                       src={
                         item.eventThumbnail ||
@@ -189,65 +190,53 @@ function JoinedEventsContent() {
                       alt={item.eventTitle}
                       className="w-full h-full object-cover"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent"></div>
 
-                    {/* Category */}
+                    {/* Status Badge */}
                     <div className="absolute top-3 left-3">
-                      <span className="px-2.5 py-0.5 rounded-md text-[11px] font-bold bg-emerald-600 text-white shadow">
-                        {item.eventType || 'Community Drive'}
+                      <span className="px-3 py-1 rounded-full text-[11px] font-bold bg-brand-600 text-white shadow-sm flex items-center gap-1">
+                        <FiCheckCircle className="w-3 h-3" />
+                        <span>Registered Volunteer</span>
                       </span>
                     </div>
 
-                    {/* Verified RSVP Stamp */}
-                    <div className="absolute top-3 right-3">
-                      <span className="flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-white/20 backdrop-blur-md text-white text-[10px] font-bold border border-white/20">
-                        <FiCheckCircle className="text-emerald-400" />
-                        <span>RSVP Confirmed</span>
+                    <div className="absolute bottom-3 left-3 right-3 text-white flex items-center justify-between text-xs">
+                      <span className="flex items-center gap-1.5 bg-slate-900/60 backdrop-blur-md px-2.5 py-1 rounded-full border border-white/10">
+                        <FiCalendar className="text-sky-400" />
+                        <span>{eventDateFormatted}</span>
                       </span>
-                    </div>
-
-                    {/* Event Date on photo */}
-                    <div className="absolute bottom-3 left-3 right-3 text-white text-xs font-semibold flex items-center gap-1.5">
-                      <FiCalendar className="text-emerald-400" />
-                      <span>{eventDateFormatted}</span>
+                      <span className="text-[10px] text-slate-300">RSVP: {joinedDateFormatted}</span>
                     </div>
                   </div>
 
-                  {/* Body Info */}
                   <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
                     <div className="space-y-2">
-                      <h3 className="font-bold text-base sm:text-lg text-base-content line-clamp-2">
-                        {item.eventTitle}
+                      <h3 className="font-bold text-base text-base-content hover:text-brand-600 transition-colors line-clamp-2">
+                        <Link href={`/events/${item.eventId}`}>{item.eventTitle}</Link>
                       </h3>
 
-                      <div className="flex items-start gap-1.5 text-xs text-base-content/70">
-                        <FiMapPin className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0 mt-0.5" />
+                      <div className="flex items-center gap-1.5 text-xs text-base-content/70">
+                        <FiMapPin className="text-brand-500 flex-shrink-0" />
                         <span className="line-clamp-1">{item.eventLocation}</span>
                       </div>
-
-                      <p className="text-[11px] text-base-content/50 pt-1">
-                        Registered on {joinedDateFormatted}
-                      </p>
                     </div>
 
-                    {/* Footer Actions */}
-                    <div className="pt-3 border-t border-base-200 flex items-center justify-between">
-                      <button
-                        onClick={() => handleLeaveEvent(item)}
-                        className="text-red-600 hover:text-red-700 text-xs font-semibold flex items-center gap-1 hover:underline"
-                        title="Cancel attendance"
-                      >
-                        <FiTrash2 className="w-3.5 h-3.5" />
-                        <span>Cancel RSVP</span>
-                      </button>
-
+                    <div className="pt-3 border-t border-base-200 flex items-center justify-between gap-2">
                       <Link
                         href={`/events/${item.eventId}`}
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-sm transition-all"
+                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-base-300 hover:bg-base-200 text-xs font-semibold text-base-content/80 transition-colors"
                       >
                         <FiEye className="w-3.5 h-3.5" />
-                        <span>View Details</span>
+                        <span>Details</span>
                       </Link>
+
+                      <button
+                        onClick={() => handleLeaveEvent(item)}
+                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-rose-300 text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/30 text-xs font-semibold transition-colors"
+                      >
+                        <FiTrash2 className="w-3.5 h-3.5" />
+                        <span>Withdraw RSVP</span>
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -267,4 +256,3 @@ export default function JoinedEventsPage() {
     </PrivateRoute>
   );
 }
-

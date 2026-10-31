@@ -1,6 +1,7 @@
 "use client";
 import React from 'react';
 import { FiCamera, FiMapPin } from 'react-icons/fi';
+import { HiSparkles } from 'react-icons/hi2';
 
 export default function GallerySection() {
   const galleryItems = [
@@ -49,49 +50,50 @@ export default function GallerySection() {
   ];
 
   return (
-    <section className="py-16 sm:py-20 px-4 bg-base-100">
+    <section className="py-20 px-4 bg-base-100">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="text-center max-w-2xl mx-auto space-y-2 mb-12">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 text-xs font-bold uppercase tracking-wider">
-            <FiCamera className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+        <div className="text-center max-w-2xl mx-auto space-y-3 mb-14">
+          <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-brand-50 dark:bg-brand-950/60 border border-brand-200 dark:border-brand-800 text-brand-700 dark:text-brand-300 text-xs font-bold uppercase tracking-wider">
+            <FiCamera className="w-3.5 h-3.5 text-brand-500" />
             <span>Community Moments</span>
           </div>
-          <h2 className="text-2xl sm:text-4xl font-black text-base-content tracking-tight">
-            Impact in Pictures
+          <h2 className="text-2xl sm:text-4xl font-extrabold text-base-content tracking-tight">
+            Field Photographs & Volunteer Drives
           </h2>
-          <p className="text-xs sm:text-sm text-base-content/70">
-            Real moments captured during our volunteer drives across neighborhoods in Bangladesh.
+          <p className="text-xs sm:text-sm text-base-content/70 leading-relaxed">
+            Snapshots of solidarity, shared warmth, and civic service organized by passionate youth groups and volunteers across Bangladesh.
           </p>
         </div>
 
-        {/* Responsive Photo Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        {/* 6 Photo Grid with Hover Reveal */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {galleryItems.map((item, idx) => (
             <div
               key={idx}
-              className="group relative rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 h-64 sm:h-72 bg-base-300"
+              className="group relative h-64 sm:h-72 rounded-3xl overflow-hidden border border-base-300/80 shadow-soft hover:shadow-xl transition-all duration-500"
             >
               <img
                 src={item.image}
                 alt={item.title}
-                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                loading="lazy"
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-95 transition-opacity duration-300"></div>
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/30 to-transparent"></div>
 
-              {/* Tag */}
-              <div className="absolute top-3.5 left-3.5">
-                <span className="px-2.5 py-1 rounded-full bg-white/20 backdrop-blur-md text-white text-[11px] font-bold border border-white/20">
+              {/* Top Category Badge */}
+              <div className="absolute top-4 left-4">
+                <span className="px-3 py-1 rounded-full text-[11px] font-bold bg-slate-900/60 text-white backdrop-blur-md border border-white/10 shadow-sm">
                   {item.category}
                 </span>
               </div>
 
-              {/* Caption Overlay */}
-              <div className="absolute bottom-3.5 left-3.5 right-3.5 space-y-1 text-white">
-                <h4 className="font-bold text-sm sm:text-base leading-snug">{item.title}</h4>
-                <div className="flex items-center gap-1 text-[11px] text-emerald-300 font-medium">
-                  <FiMapPin className="w-3 h-3" />
+              {/* Bottom Details */}
+              <div className="absolute bottom-4 left-4 right-4 text-white space-y-1">
+                <h4 className="font-bold text-base leading-snug group-hover:text-sky-300 transition-colors">
+                  {item.title}
+                </h4>
+                <div className="flex items-center gap-1.5 text-xs text-slate-300">
+                  <FiMapPin className="w-3.5 h-3.5 text-brand-400" />
                   <span>{item.location}</span>
                 </div>
               </div>
@@ -102,4 +104,3 @@ export default function GallerySection() {
     </section>
   );
 }
-

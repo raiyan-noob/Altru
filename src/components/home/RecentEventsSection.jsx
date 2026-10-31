@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { FiArrowRight, FiCalendar } from 'react-icons/fi';
+import { HiSparkles } from 'react-icons/hi2';
 import EventCard from '@/components/EventCard';
 import { EventCardSkeleton } from '@/components/LoadingSkeleton';
 
@@ -35,33 +36,33 @@ export default function RecentEventsSection() {
   }, []);
 
   return (
-    <section className="py-16 sm:py-24 px-4 bg-base-100">
+    <section className="py-20 px-4 bg-base-100">
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
-          <div className="space-y-2 max-w-xl">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 text-xs font-bold uppercase tracking-wider">
-              <FiCalendar className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
+          <div className="space-y-2.5 max-w-xl">
+            <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-brand-50 dark:bg-brand-950/60 border border-brand-200 dark:border-brand-800 text-brand-700 dark:text-brand-300 text-xs font-bold uppercase tracking-wider">
+              <FiCalendar className="w-3.5 h-3.5 text-brand-500" />
               <span>Upcoming Initiatives</span>
             </div>
-            <h2 className="text-2xl sm:text-4xl font-black text-base-content tracking-tight">
-              Recent Upcoming Events
+            <h2 className="text-2xl sm:text-4xl font-extrabold text-base-content tracking-tight">
+              Recent Upcoming Community Drives
             </h2>
-            <p className="text-xs sm:text-sm text-base-content/70">
-              Discover 6 upcoming community welfare drives across Dhaka and neighboring areas. Join as a volunteer or supporter today.
+            <p className="text-xs sm:text-sm text-base-content/70 leading-relaxed">
+              Discover 6 upcoming welfare events curated from grassroots organizers across Bangladesh. Step in to RSVP or explore volunteer guidelines.
             </p>
           </div>
 
           <Link
             href="/events"
-            className="inline-flex items-center gap-2 self-start md:self-end px-4 py-2 rounded-xl bg-emerald-50 dark:bg-emerald-950/50 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 text-emerald-700 dark:text-emerald-300 text-xs sm:text-sm font-bold transition-all duration-200"
+            className="inline-flex items-center gap-2 self-start md:self-end px-5 py-2.5 rounded-2xl bg-brand-50 dark:bg-brand-950/60 hover:bg-brand-100 dark:hover:bg-brand-900/60 text-brand-700 dark:text-brand-300 text-xs sm:text-sm font-bold border border-brand-200 dark:border-brand-800 hover:border-brand-400 transition-all duration-200 shadow-sm"
           >
-            <span>View All Events</span>
+            <span>Browse All Events</span>
             <FiArrowRight className="w-4 h-4" />
           </Link>
         </div>
 
-        {/* Content Area */}
+        {/* Dynamic 2 or 3 Column Grid */}
         {loading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[...Array(6)].map((_, i) => (
@@ -69,50 +70,33 @@ export default function RecentEventsSection() {
             ))}
           </div>
         ) : error ? (
-          <div className="text-center py-12 px-4 rounded-2xl bg-base-200/60 border border-base-300">
-            <p className="text-sm text-red-500 font-semibold">{error}</p>
-            <button
-              onClick={() => window.location.reload()}
-              className="mt-3 px-4 py-1.5 rounded-lg bg-emerald-600 text-white text-xs font-bold"
-            >
-              Retry
-            </button>
+          <div className="text-center py-12 rounded-3xl border border-dashed border-base-300 bg-base-200/50 p-8 space-y-3">
+            <p className="text-sm font-semibold text-rose-500">{error}</p>
+            <p className="text-xs text-base-content/60">
+              Please check if the backend server is running on port 5000.
+            </p>
           </div>
         ) : events.length === 0 ? (
-          <div className="text-center py-16 px-4 rounded-2xl bg-base-200/50 border border-base-300 space-y-3">
-            <FiCalendar className="w-10 h-10 text-emerald-500 mx-auto" />
-            <h3 className="text-lg font-bold text-base-content">No upcoming events found</h3>
-            <p className="text-xs sm:text-sm text-base-content/60 max-w-md mx-auto">
-              Be the first community organizer to create an event and mobilize volunteers in your neighborhood!
+          <div className="text-center py-16 rounded-3xl border border-dashed border-base-300 bg-base-200/30 p-8 space-y-3">
+            <p className="text-base font-bold text-base-content">No upcoming drives posted yet</p>
+            <p className="text-xs text-base-content/60 max-w-sm mx-auto">
+              Be the first changemaker in your area to create a winter clothes distribution or cleanup drive!
             </p>
             <Link
               href="/create-event"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 text-white font-bold text-xs shadow-md"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-brand-600 text-white text-xs font-bold shadow-sm hover:bg-brand-700"
             >
-              <span>Create an Event</span>
-              <FiArrowRight className="w-3.5 h-3.5" />
+              <span>Host the First Event</span>
             </Link>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {events.map((event) => (
-              <EventCard key={event._id || event.id} event={event} />
+            {events.map((evt) => (
+              <EventCard key={evt._id || evt.id} event={evt} />
             ))}
           </div>
         )}
-
-        {/* Bottom CTA */}
-        <div className="text-center mt-12">
-          <Link
-            href="/events"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold text-sm shadow-md shadow-emerald-600/20 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
-          >
-            <span>Browse All Community Events</span>
-            <FiArrowRight className="w-4 h-4" />
-          </Link>
-        </div>
       </div>
     </section>
   );
 }
-

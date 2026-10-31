@@ -8,6 +8,7 @@ import {
   FiPlusCircle,
   FiRefreshCw,
 } from 'react-icons/fi';
+import { HiSparkles } from 'react-icons/hi2';
 import EventCard from '@/components/EventCard';
 import { EventCardSkeleton } from '@/components/LoadingSkeleton';
 
@@ -102,16 +103,16 @@ export default function UpcomingEventsPage() {
   }, [events, selectedType, searchQuery, sortBy]);
 
   return (
-    <div className="py-10 sm:py-16 px-4 bg-base-100 min-h-screen">
+    <div className="py-12 sm:py-16 px-4 bg-base-100 min-h-screen">
       <div className="max-w-7xl mx-auto space-y-8">
         {/* Page Title & Breadcrumb */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-base-200 pb-6">
-          <div className="space-y-1.5">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 text-xs font-bold uppercase tracking-wider">
-              <FiCalendar className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+          <div className="space-y-2">
+            <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-brand-50 dark:bg-brand-950/60 border border-brand-200 dark:border-brand-800 text-brand-700 dark:text-brand-300 text-xs font-bold uppercase tracking-wider">
+              <FiCalendar className="w-3.5 h-3.5 text-brand-500" />
               <span>Public Directory</span>
             </div>
-            <h1 className="text-3xl sm:text-4xl font-black text-base-content tracking-tight">
+            <h1 className="text-3xl sm:text-4xl font-extrabold text-base-content tracking-tight">
               Upcoming Community Events
             </h1>
             <p className="text-xs sm:text-sm text-base-content/70">
@@ -121,7 +122,7 @@ export default function UpcomingEventsPage() {
 
           <Link
             href="/create-event"
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold text-xs sm:text-sm shadow-md transition-all self-start sm:self-auto"
+            className="inline-flex items-center gap-2 px-5 py-3 rounded-2xl bg-gradient-to-r from-brand-600 via-indigo-600 to-sky-600 hover:from-brand-500 hover:to-sky-500 text-white font-bold text-xs sm:text-sm shadow-soft hover:shadow-glow transition-all self-start sm:self-auto"
           >
             <FiPlusCircle className="w-4 h-4" />
             <span>Create New Event</span>
@@ -129,7 +130,7 @@ export default function UpcomingEventsPage() {
         </div>
 
         {/* Filter and Search Bar Controls */}
-        <div className="bg-base-200/60 p-4 rounded-2xl border border-base-300/80 space-y-3">
+        <div className="bg-base-200/50 p-4 sm:p-5 rounded-3xl border border-base-300/80 space-y-3.5 shadow-sm">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-3 items-center">
             {/* Search Input */}
             <div className="md:col-span-5 relative">
@@ -138,8 +139,8 @@ export default function UpcomingEventsPage() {
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search by title, neighborhood, or keyword (e.g. Mirpur, Blankets)..."
-                className="w-full pl-10 pr-4 py-2 rounded-xl bg-base-100 border border-base-300 focus:border-emerald-500 focus:outline-none text-xs sm:text-sm"
+                placeholder="Search by title, location (e.g. Mirpur, Mohammadpur)..."
+                className="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-base-100 border border-base-300 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20 text-xs sm:text-sm"
               />
             </div>
 
@@ -149,7 +150,7 @@ export default function UpcomingEventsPage() {
               <select
                 value={selectedType}
                 onChange={(e) => setSelectedType(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 rounded-xl bg-base-100 border border-base-300 focus:border-emerald-500 focus:outline-none text-xs sm:text-sm cursor-pointer"
+                className="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-base-100 border border-base-300 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20 text-xs sm:text-sm cursor-pointer"
               >
                 {categories.map((cat) => (
                   <option key={cat} value={cat}>
@@ -164,7 +165,7 @@ export default function UpcomingEventsPage() {
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                className="w-full px-3 py-2 rounded-xl bg-base-100 border border-base-300 focus:border-emerald-500 focus:outline-none text-xs sm:text-sm cursor-pointer"
+                className="w-full px-3.5 py-2.5 rounded-2xl bg-base-100 border border-base-300 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20 text-xs sm:text-sm cursor-pointer"
               >
                 <option value="soonest">Sort: Happening Soonest</option>
                 <option value="latest">Sort: Later Dates</option>
@@ -181,10 +182,10 @@ export default function UpcomingEventsPage() {
               <button
                 key={cat}
                 onClick={() => setSelectedType(cat)}
-                className={`px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap transition-all duration-200 ${
+                className={`px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all duration-200 ${
                   selectedType === cat
-                    ? 'bg-emerald-600 text-white shadow-sm'
-                    : 'bg-base-100 hover:bg-base-300 text-base-content/70 border border-base-300'
+                    ? 'bg-brand-600 text-white shadow-sm'
+                    : 'bg-base-100 hover:bg-base-300/80 text-base-content/70 border border-base-300'
                 }`}
               >
                 {cat}
@@ -200,7 +201,7 @@ export default function UpcomingEventsPage() {
           </span>
           <button
             onClick={fetchEvents}
-            className="flex items-center gap-1 hover:text-emerald-600 transition-colors"
+            className="flex items-center gap-1.5 hover:text-brand-600 transition-colors font-medium"
             title="Refresh events list"
           >
             <FiRefreshCw className="w-3.5 h-3.5" />
@@ -216,13 +217,13 @@ export default function UpcomingEventsPage() {
             ))}
           </div>
         ) : error ? (
-          <div className="text-center py-16 px-4 bg-base-200/50 rounded-2xl border border-base-300 space-y-3">
-            <p className="text-sm font-semibold text-red-500">{error}</p>
+          <div className="text-center py-16 px-4 bg-base-200/50 rounded-3xl border border-base-300 space-y-3">
+            <p className="text-sm font-semibold text-rose-500">{error}</p>
             <button
               onClick={fetchEvents}
-              className="px-4 py-2 bg-emerald-600 text-white rounded-xl text-xs font-bold"
+              className="px-5 py-2.5 bg-brand-600 text-white rounded-xl text-xs font-bold"
             >
-              Retry
+              Retry Connection
             </button>
           </div>
         ) : filteredEvents.length === 0 ? (
@@ -244,13 +245,13 @@ export default function UpcomingEventsPage() {
                   setSearchQuery('');
                   setSelectedType('All');
                 }}
-                className="px-4 py-2 rounded-xl border border-base-300 text-xs font-bold hover:bg-base-200"
+                className="px-4 py-2.5 rounded-xl border border-base-300 text-xs font-bold hover:bg-base-200"
               >
                 Reset Filters
               </button>
               <Link
                 href="/create-event"
-                className="px-4 py-2 rounded-xl bg-emerald-600 text-white text-xs font-bold hover:bg-emerald-700 shadow"
+                className="px-5 py-2.5 rounded-xl bg-brand-600 text-white text-xs font-bold hover:bg-brand-700 shadow-sm"
               >
                 Create Event
               </Link>
@@ -267,4 +268,3 @@ export default function UpcomingEventsPage() {
     </div>
   );
 }
-
