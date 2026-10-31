@@ -5,7 +5,7 @@ import { jwt } from "better-auth/plugins";
 
 const uri =
   process.env.MONGODB_URI ||
-  "mongodb://Paharika:dFQLY6dIqtc7yh2f@ac-zgr00ce-shard-00-00.hffrouf.mongodb.net:27017,ac-zgr00ce-shard-00-01.hffrouf.mongodb.net:27017,ac-zgr00ce-shard-00-02.hffrouf.mongodb.net:27017/altru_db?ssl=true&replicaSet=atlas-97vqqn-shard-0&authSource=admin";
+  "mongodb://Altru:fTNzEbusCcp4oRwy@ac-zgr00ce-shard-00-00.hffrouf.mongodb.net:27017,ac-zgr00ce-shard-00-01.hffrouf.mongodb.net:27017,ac-zgr00ce-shard-00-02.hffrouf.mongodb.net:27017/altru_db?ssl=true&replicaSet=atlas-97vqqn-shard-0&authSource=admin";
 
 let client;
 try {
@@ -31,9 +31,8 @@ export const auth = betterAuth({
   },
   socialProviders: {
     google: {
-      clientId: process.env.GOOGLE_CLIENT_ID || "altru-google-client-id",
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET || "altru-google-secret",
-      enabled: true,
+      clientId: process.env.GOOGLE_CLIENT_ID || "",
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
     },
   },
   plugins: [
@@ -47,4 +46,3 @@ export const auth = betterAuth({
     }),
   ],
 });
-

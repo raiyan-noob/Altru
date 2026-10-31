@@ -21,6 +21,56 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     async function restoreSession() {
       try {
+        // 1. Check BetterAuth session first (handles Google OAuth redirect callbacks)
+        try {
+          if (authClient && typeof authClient.getSession === 'function') {
+            const sessionRes = await authClient.getSession();
+            if (sessionRes?.data?.user) {
+              const baUser = sessionRes.data.user;
+
+              // Ensure MongoDB backend and stateless JWT token are synchronized
+              try {
+                const syncRes = await fetch(`${API_BASE}/auth/google`, {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({
+                    name: baUser.name,
+                    email: baUser.email,
+                    photoURL: baUser.image || '',
+                  }),
+                });
+
+                const syncData = await syncRes.json();
+                if (syncData.success && syncData.token) {
+                  localStorage.setItem('altru_token', syncData.token);
+                  localStorage.setItem('altru_user', JSON.stringify(syncData.user));
+                  setToken(syncData.token);
+                  setUser(syncData.user);
+                  setLoading(false);
+                  return;
+                }
+              } catch (syncErr) {
+                console.warn('Backend session sync notice:', syncErr);
+              }
+
+              // Fallback to direct BetterAuth profile
+              const directUser = {
+                id: baUser.id,
+                name: baUser.name,
+                email: baUser.email,
+                photoURL: baUser.image,
+                role: 'volunteer',
+              };
+              setUser(directUser);
+              setLoading(false);
+              return;
+            }
+          }
+        } catch (baCheckErr) {
+          console.warn('BetterAuth getSession check:', baCheckErr);
+        }
+
+        // 2. Restore from stored local session
         const storedToken = localStorage.getItem('altru_token');
         const storedUser = localStorage.getItem('altru_user');
 
@@ -95,7 +145,7 @@ export function AuthProvider({ children }) {
       Swal.fire({
         icon: 'success',
         title: 'Welcome to Altru!',
-        text: 'Your volunteer account has been created successfully with BetterAuth.',
+        text: 'Your volunteer account has been created successfully.',
         timer: 2200,
         showConfirmButton: false,
       });
@@ -161,55 +211,22 @@ export function AuthProvider({ children }) {
     }
   };
 
-  // Google Login / Registration via BetterAuth
-  const googleSignIn = async (profileData) => {
+  // Pure Google OAuth Login via BetterAuth
+  const googleSignIn = async (callbackPath = '/') => {
     try {
-      // 1. Attempt BetterAuth native social sign in if in browser
-      try {
-        if (typeof window !== 'undefined' && authClient?.signIn?.social) {
-          await authClient.signIn.social({
-            provider: 'google',
-            callbackURL: '/',
-          });
-        }
-      } catch (socErr) {
-        console.warn('BetterAuth social sign in notice:', socErr);
+      if (typeof window !== 'undefined' && authClient?.signIn?.social) {
+        const fullCallbackURL = callbackPath.startsWith('http')
+          ? callbackPath
+          : `${window.location.origin}${callbackPath}`;
+
+        await authClient.signIn.social({
+          provider: 'google',
+          callbackURL: fullCallbackURL,
+        });
       }
-
-      // 2. Synchronize with MongoDB database and retrieve stateless JWT token
-      const res = await fetch(`${API_BASE}/auth/google`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(profileData),
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        throw new Error(data.message || 'Google sign-in failed');
-      }
-
-      localStorage.setItem('altru_token', data.token);
-      localStorage.setItem('altru_user', JSON.stringify(data.user));
-      setToken(data.token);
-      setUser(data.user);
-
-      Swal.fire({
-        icon: 'success',
-        title: 'Google Login Successful!',
-        text: `Welcome, ${data.user.name}!`,
-        timer: 2000,
-        showConfirmButton: false,
-      });
-
-      return { success: true, user: data.user };
     } catch (err) {
-      Swal.fire({
-        icon: 'error',
-        title: 'Google Login Error',
-        text: err.message,
-      });
-      return { success: false, error: err.message };
+      console.error('BetterAuth Google Sign In Error:', err);
+      throw err;
     }
   };
 

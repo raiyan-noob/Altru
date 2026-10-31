@@ -7,10 +7,8 @@ import {
   FiMail,
   FiLock,
   FiLogIn,
-  FiUserPlus,
   FiEye,
   FiEyeOff,
-  FiArrowRight,
 } from 'react-icons/fi';
 import { FaGoogle } from 'react-icons/fa';
 import { HiSparkles } from 'react-icons/hi2';
@@ -60,43 +58,20 @@ function LoginForm() {
     }
   };
 
+  // Pure BetterAuth Google OAuth trigger: no dialog, straight to Google authentication
   const handleGoogleLogin = async () => {
-    const { value: formValues } = await Swal.fire({
-      title: 'Google One-Click Sign In',
-      html:
-        '<p class="text-xs text-gray-500 mb-3">Sign in using your Google Volunteer Profile</p>' +
-        '<input id="swal-input-name" class="swal2-input text-xs" placeholder="Your Full Name" value="Volunteer User">' +
-        '<input id="swal-input-email" class="swal2-input text-xs" placeholder="Google Email" value="volunteer.dhaka@gmail.com">',
-      focusConfirm: false,
-      showCancelButton: true,
-      confirmButtonText: 'Continue with Google',
-      cancelButtonText: 'Cancel',
-      confirmButtonColor: '#4f46e5',
-      preConfirm: () => {
-        const name = document.getElementById('swal-input-name').value;
-        const email = document.getElementById('swal-input-email').value;
-        if (!email) {
-          Swal.showValidationMessage('Please enter an email address');
-        }
-        return { name, email };
-      },
-    });
-
-    if (formValues) {
+    try {
       setSubmitting(true);
-      const result = await googleSignIn({
-        name: formValues.name || 'Google Volunteer',
-        email: formValues.email,
-        photoURL:
-          'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=256&q=80',
-      });
+      await googleSignIn(redirectUrl);
+    } catch (err) {
       setSubmitting(false);
-
-      if (result.success) {
-        toast.success(`Google authentication confirmed! Welcome, ${formValues.name}.`);
-        // Redirects to homepage ('/')
-        router.push(redirectUrl);
-      }
+      console.error('BetterAuth Google Sign In Error:', err);
+      toast.error(err.message || 'Could not initiate Google sign in with BetterAuth.');
+      Swal.fire({
+        icon: 'error',
+        title: 'Google Sign In Error',
+        text: err.message || 'Could not connect to Google sign in.',
+      });
     }
   };
 
