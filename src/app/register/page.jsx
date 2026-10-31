@@ -64,7 +64,7 @@ export default function RegisterPage() {
       return;
     }
 
-    // Strict Password Validation as required:
+    // Strict Password Validation:
     // "must have an uppercase letter, a lowercase letter, and a length of at least 6 characters. If any of these requirements isn't fulfilled, show an error message/toast."
     if (!hasMinLength) {
       toast.error('Password must be at least 6 characters long.');
@@ -108,7 +108,8 @@ export default function RegisterPage() {
     setSubmitting(false);
 
     if (result.success) {
-      toast.success('🎉 Welcome to Altru! Account created successfully via BetterAuth.', { icon: '✨' });
+      toast.success('🎉 Welcome to Altru! Account created successfully.', { icon: '✨' });
+      // Redirects to homepage ('/')
       router.push('/');
     }
   };
@@ -284,7 +285,7 @@ export default function RegisterPage() {
               className="w-full py-3 rounded-2xl bg-gradient-to-r from-brand-600 via-indigo-600 to-sky-600 hover:from-brand-500 hover:to-sky-500 text-white font-bold text-xs sm:text-sm shadow-soft hover:shadow-glow transition-all flex items-center justify-center gap-2"
             >
               <FiUserPlus className="w-4 h-4" />
-              <span>{submitting ? 'Registering via BetterAuth...' : 'Create Account with BetterAuth'}</span>
+              <span>{submitting ? 'Registering...' : 'Create Account'}</span>
             </button>
           </form>
 
