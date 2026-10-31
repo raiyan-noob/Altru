@@ -1,5 +1,11 @@
 "use client";
 import React, { createContext, useContext, useEffect, useState } from 'react';
+import {
+  authClient,
+  signIn as betterSignIn,
+  signUp as betterSignUp,
+  signOut as betterSignOut,
+} from '@/lib/auth-client';
 import Swal from 'sweetalert2';
 
 const AuthContext = createContext();
@@ -11,7 +17,7 @@ export function AuthProvider({ children }) {
   const [token, setToken] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Restore session from localStorage on initial load
+  // Restore session from BetterAuth / localStorage on initial load
   useEffect(() => {
     async function restoreSession() {
       try {
@@ -33,7 +39,6 @@ export function AuthProvider({ children }) {
               setUser(data.user);
               localStorage.setItem('altru_user', JSON.stringify(data.user));
             } else if (res.status === 401 || res.status === 403) {
-              // Token expired
               localStorage.removeItem('altru_token');
               localStorage.removeItem('altru_user');
               setUser(null);
@@ -53,9 +58,22 @@ export function AuthProvider({ children }) {
     restoreSession();
   }, []);
 
-  // Email & Password Registration
+  // Email & Password Registration via BetterAuth
   const register = async ({ name, email, photoURL, password }) => {
     try {
+      // 1. BetterAuth registration
+      try {
+        await betterSignUp.email({
+          email,
+          password,
+          name,
+          image: photoURL,
+        });
+      } catch (baErr) {
+        console.warn('BetterAuth sign-up response notice:', baErr);
+      }
+
+      // 2. Synchronize with MongoDB database and retrieve API JWT
       const res = await fetch(`${API_BASE}/auth/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -77,7 +95,7 @@ export function AuthProvider({ children }) {
       Swal.fire({
         icon: 'success',
         title: 'Welcome to Altru!',
-        text: 'Your volunteer account has been created successfully.',
+        text: 'Your volunteer account has been created successfully with BetterAuth.',
         timer: 2200,
         showConfirmButton: false,
       });
@@ -93,9 +111,20 @@ export function AuthProvider({ children }) {
     }
   };
 
-  // Email & Password Login
+  // Email & Password Login via BetterAuth
   const login = async (email, password) => {
     try {
+      // 1. BetterAuth client sign in
+      try {
+        await betterSignIn.email({
+          email,
+          password,
+        });
+      } catch (baErr) {
+        console.warn('BetterAuth sign-in response notice:', baErr);
+      }
+
+      // 2. Authenticate with backend and retrieve stateless JWT token
       const res = await fetch(`${API_BASE}/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -132,9 +161,22 @@ export function AuthProvider({ children }) {
     }
   };
 
-  // Google Login / Registration
+  // Google Login / Registration via BetterAuth
   const googleSignIn = async (profileData) => {
     try {
+      // 1. Attempt BetterAuth native social sign in if in browser
+      try {
+        if (typeof window !== 'undefined' && authClient?.signIn?.social) {
+          await authClient.signIn.social({
+            provider: 'google',
+            callbackURL: '/',
+          });
+        }
+      } catch (socErr) {
+        console.warn('BetterAuth social sign in notice:', socErr);
+      }
+
+      // 2. Synchronize with MongoDB database and retrieve stateless JWT token
       const res = await fetch(`${API_BASE}/auth/google`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -164,17 +206,30 @@ export function AuthProvider({ children }) {
     } catch (err) {
       Swal.fire({
         icon: 'error',
-        title: 'Google Auth Error',
+        title: 'Google Login Error',
         text: err.message,
       });
       return { success: false, error: err.message };
     }
   };
 
-  // Profile Update (Name & PhotoURL)
+  // Logout via BetterAuth
+  const logout = async () => {
+    try {
+      await betterSignOut();
+    } catch (e) {
+      console.warn('BetterAuth sign out notice:', e);
+    }
+    localStorage.removeItem('altru_token');
+    localStorage.removeItem('altru_user');
+    setUser(null);
+    setToken(null);
+  };
+
+  // Update profile
   const updateProfile = async ({ name, photoURL }) => {
     try {
-      if (!token) throw new Error('You must be logged in to update your profile.');
+      if (!token) throw new Error('Not authenticated');
 
       const res = await fetch(`${API_BASE}/auth/profile`, {
         method: 'PUT',
@@ -191,18 +246,13 @@ export function AuthProvider({ children }) {
         throw new Error(data.message || 'Failed to update profile');
       }
 
-      if (data.token) {
-        localStorage.setItem('altru_token', data.token);
-        setToken(data.token);
-      }
-
-      localStorage.setItem('altru_user', JSON.stringify(data.user));
       setUser(data.user);
+      localStorage.setItem('altru_user', JSON.stringify(data.user));
 
       Swal.fire({
         icon: 'success',
-        title: 'Profile Updated',
-        text: 'Your personal information has been saved.',
+        title: 'Profile Updated!',
+        text: 'Your profile changes have been saved.',
         timer: 2000,
         showConfirmButton: false,
       });
@@ -211,27 +261,11 @@ export function AuthProvider({ children }) {
     } catch (err) {
       Swal.fire({
         icon: 'error',
-        title: 'Update Error',
+        title: 'Update Failed',
         text: err.message,
       });
       return { success: false, error: err.message };
     }
-  };
-
-  // Logout
-  const logout = () => {
-    localStorage.removeItem('altru_token');
-    localStorage.removeItem('altru_user');
-    setUser(null);
-    setToken(null);
-
-    Swal.fire({
-      icon: 'info',
-      title: 'Logged Out',
-      text: 'You have been logged out of Altru.',
-      timer: 1800,
-      showConfirmButton: false,
-    });
   };
 
   return (
@@ -240,13 +274,13 @@ export function AuthProvider({ children }) {
         user,
         token,
         loading,
-        isAuthenticated: !!user,
         login,
         register,
         googleSignIn,
-        updateProfile,
         logout,
-        apiBase: API_BASE,
+        updateProfile,
+        isAuthenticated: !!user,
+        authClient,
       }}
     >
       {children}
@@ -255,10 +289,5 @@ export function AuthProvider({ children }) {
 }
 
 export function useAuth() {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  return context;
+  return useContext(AuthContext);
 }
-

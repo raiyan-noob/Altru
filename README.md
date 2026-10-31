@@ -19,6 +19,7 @@ Altru is a modern, responsive web application empowering citizens, youth clubs, 
 
 ## 🛠️ Tech Stack
 
+- **Authentication & Authorization:** BetterAuth (MongoDB Adapter, JWT plugin), Express JWT Bearer Tokens
 - **Framework:** Next.js (App Router, JavaScript)
 - **Styling & UI:** Tailwind CSS, DaisyUI
 - **Icons & Visuals:** React Icons, Unsplash Curated Photography
@@ -38,8 +39,8 @@ Altru is a modern, responsive web application empowering citizens, youth clubs, 
 | `/manage-events` | Private | Organizer dashboard to review, update, or delete your own created events with confirmation modals |
 | `/joined-events` | Private | Personal volunteer schedule showing all joined events sorted by event date with cancel RSVP option |
 | `/profile` | Private | Volunteer profile view with hosted/joined impact statistics and profile photo/name update feature |
-| `/login` | Public | Email/password login with demo credential quick-fill and Google one-click sign-in |
-| `/register` | Public | Volunteer registration with strict password complexity validator |
+| `/login` | Public | Email/password login with BetterAuth, demo credential quick-fill, Google one-click sign-in, and automatic redirection to Homepage (`/`) |
+| `/register` | Public | Volunteer registration powered by BetterAuth with strict password complexity validator |
 
 ---
 

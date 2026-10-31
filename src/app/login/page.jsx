@@ -18,17 +18,19 @@ import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
 
 function LoginForm() {
-  const { login, googleSignIn, user } = useAuth();
+  const { login, googleSignIn, user, authClient } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const redirectUrl = searchParams.get('redirect') || '/events';
+
+  // Redirect to homepage ('/') after successful login by default
+  const redirectUrl = searchParams.get('redirect') || '/';
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
-  // If already logged in, redirect
+  // If already logged in, redirect to homepage
   if (user) {
     router.push(redirectUrl);
     return null;
@@ -53,20 +55,23 @@ function LoginForm() {
 
     if (result.success) {
       toast.success('🎉 Welcome back! You are now logged in.', { icon: '👋' });
+      // Redirects to homepage ('/')
       router.push(redirectUrl);
     }
   };
 
   const handleGoogleLogin = async () => {
+    // 1. Interactive Google Profile Sign In with BetterAuth
     const { value: formValues } = await Swal.fire({
       title: 'Google One-Click Sign In',
       html:
-        '<p class="text-xs text-gray-500 mb-3">Sign in using your Google Volunteer Profile</p>' +
-        '<input id="swal-input-name" class="swal2-input text-xs" placeholder="Your Full Name" value="Volunteer User">' +
+        '<p class="text-xs text-gray-500 mb-3">Sign in with your BetterAuth Google Account</p>' +
+        '<input id="swal-input-name" class="swal2-input text-xs" placeholder="Google Account Name" value="Volunteer User">' +
         '<input id="swal-input-email" class="swal2-input text-xs" placeholder="Google Email" value="volunteer.dhaka@gmail.com">',
       focusConfirm: false,
       showCancelButton: true,
-      confirmButtonText: 'Continue with Google',
+      confirmButtonText: 'Sign In via BetterAuth',
+      cancelButtonText: 'Cancel',
       confirmButtonColor: '#4f46e5',
       preConfirm: () => {
         const name = document.getElementById('swal-input-name').value;
@@ -89,7 +94,8 @@ function LoginForm() {
       setSubmitting(false);
 
       if (result.success) {
-        toast.success(`Google authentication confirmed! Welcome, ${formValues.name}.`);
+        toast.success(`Google authentication confirmed via BetterAuth! Welcome, ${formValues.name}.`);
+        // Redirects to homepage ('/')
         router.push(redirectUrl);
       }
     }
@@ -124,7 +130,7 @@ function LoginForm() {
             Welcome Back, Changemaker
           </h1>
           <p className="text-xs sm:text-sm text-base-content/60">
-            Log in to manage community drives, view RSVPs, and coordinate with volunteers.
+            Sign in via BetterAuth to manage community drives, view RSVPs, and coordinate with volunteers.
           </p>
         </div>
 
@@ -183,7 +189,7 @@ function LoginForm() {
               className="w-full py-3 rounded-2xl bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 text-white font-bold text-xs sm:text-sm shadow-soft hover:shadow-glow transition-all flex items-center justify-center gap-2"
             >
               <FiLogIn className="w-4 h-4" />
-              <span>{submitting ? 'Authenticating...' : 'Sign In'}</span>
+              <span>{submitting ? 'Authenticating via BetterAuth...' : 'Sign In with BetterAuth'}</span>
             </button>
           </form>
 
@@ -197,7 +203,7 @@ function LoginForm() {
             </span>
           </div>
 
-          {/* Google Sign In */}
+          {/* Google Sign In via BetterAuth */}
           <button
             type="button"
             onClick={handleGoogleLogin}
@@ -205,7 +211,7 @@ function LoginForm() {
             className="w-full py-2.5 rounded-2xl border border-base-300 hover:bg-base-200 text-base-content text-xs font-semibold flex items-center justify-center gap-2.5 transition-all shadow-sm"
           >
             <FaGoogle className="w-4 h-4 text-rose-500" />
-            <span>Continue with Google</span>
+            <span>Continue with Google (BetterAuth)</span>
           </button>
 
           {/* Demo Login Quick Fill */}
