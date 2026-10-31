@@ -10,42 +10,42 @@ export default function GallerySection() {
       location: 'Mirpur 10, Dhaka',
       category: 'Donation',
       image:
-        'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=800&q=80',
+        'https://s3sdghub-bucket.s3.eu-west-1.amazonaws.com/core-cms/public/styles/media_image_large/public/ipositive-pirganj-thakurgaon-winter-cloth-distribution-2016-1.jpeg?itok=OGI5RK3h',
     },
     {
       title: 'Tree Plantation & Greening Drive',
       location: 'Ramna Park, Dhaka',
       category: 'Environment',
       image:
-        'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=800&q=80',
+        'https://media.prothomalo.com/prothomalo-english%2F2024-04%2F51304d34-c58e-4b9e-992f-b5baa16fb390%2FBonsai.webp?rect=0%2C83%2C800%2C450&w=1200&ar=16%3A9&auto=format%2Ccompress&ogImage=true&mode=crop&overlay=&overlay_position=bottom&overlay_width_pct=1',
     },
     {
       title: 'Mohammadpur Blanket Distribution',
       location: 'Mohammadpur, Dhaka',
       category: 'Relief',
       image:
-        'https://images.unsplash.com/photo-1593113598332-cd288d649433?auto=format&fit=crop&w=800&q=80',
+        'https://www.echo-usa.org/assets/uploads/media-uploader/winter-clothes-distribution-small-17043641881735799919.jpg',
     },
     {
       title: 'Free Health & Medicine Clinic',
       location: 'Old Dhaka Community Hall',
       category: 'Healthcare',
       image:
-        'https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&w=800&q=80',
+        'https://nova.org.bd/Content/img/CompleteProject/FreeHealthCare/healthcare-mission.jpg',
     },
     {
       title: 'Dhanmondi Lake Clean Water Drive',
       location: 'Dhanmondi, Dhaka',
       category: 'Cleanup',
       image:
-        'https://images.unsplash.com/photo-1618477461853-cf6ed80faba5?auto=format&fit=crop&w=800&q=80',
+        'https://www.tbsnews.net/sites/default/files/styles/big_2/public/images/2020/09/20/am5a0121.jpg',
     },
     {
       title: 'Educational Stationery Distribution',
       location: 'Korail Basti School, Dhaka',
       category: 'Education',
       image:
-        'https://images.unsplash.com/photo-1497633762265-9d179a990aa6?auto=format&fit=crop&w=800&q=80',
+        'https://vhbd.org/wp-content/uploads/2019/09/distribution-of-educational-material-to-poor-students-500x500.jpg',
     },
   ];
 

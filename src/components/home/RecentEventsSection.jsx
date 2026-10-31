@@ -49,7 +49,7 @@ export default function RecentEventsSection() {
               Recent Upcoming Community Drives
             </h2>
             <p className="text-xs sm:text-sm text-base-content/70 leading-relaxed">
-              Discover 6 upcoming welfare events curated from grassroots organizers across Bangladesh. Step in to RSVP or explore volunteer guidelines.
+              Discover upcoming welfare events curated from grassroots organizers across Bangladesh. Step in to RSVP or explore volunteer guidelines.
             </p>
           </div>
 

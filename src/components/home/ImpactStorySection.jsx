@@ -20,7 +20,7 @@ export default function ImpactStorySection() {
           <div className="lg:col-span-6 relative">
             <div className="relative rounded-3xl overflow-hidden shadow-2xl border border-base-300">
               <img
-                src="https://images.unsplash.com/photo-1593113598332-cd288d649433?auto=format&fit=crop&w=800&q=80"
+                src="https://borgenproject.org/wp-content/uploads/The-Life-You-Can-Save-Charities-in-Bangladesh.jpg"
                 alt="Community volunteers packing aid packages"
                 className="w-full h-80 sm:h-96 object-cover"
               />

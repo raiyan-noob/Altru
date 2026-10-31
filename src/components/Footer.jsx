@@ -12,7 +12,7 @@ import {
   FiTwitter,
   FiLinkedin,
 } from 'react-icons/fi';
-import { HiSparkles } from 'react-icons/hi2';
+import { FaHandsHelping } from 'react-icons/fa';
 
 export default function Footer() {
   const [showScrollTop, setShowScrollTop] = useState(false);
@@ -33,12 +33,12 @@ export default function Footer() {
     <footer className="relative bg-base-200/90 border-t border-base-300 text-base-content mt-auto">
       {/* Upper Footer */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 lg:py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12">
           {/* Brand Info */}
           <div className="space-y-4">
             <Link href="/" className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-brand-600 via-indigo-600 to-sky-500 flex items-center justify-center text-white shadow-glow">
-                <HiSparkles className="w-5 h-5 text-amber-200" />
+                <FaHandsHelping className="w-5 h-5 text-amber-200" />
               </div>
               <div className="flex flex-col">
                 <span className="text-2xl font-black tracking-tight bg-gradient-to-r from-brand-600 via-indigo-600 to-sky-500 bg-clip-text text-transparent">
@@ -58,7 +58,6 @@ export default function Footer() {
               {[
                 { icon: <FiFacebook className="w-4 h-4" />, href: '#', label: 'Facebook' },
                 { icon: <FiInstagram className="w-4 h-4" />, href: '#', label: 'Instagram' },
-                { icon: <FiTwitter className="w-4 h-4" />, href: '#', label: 'Twitter' },
                 { icon: <FiLinkedin className="w-4 h-4" />, href: '#', label: 'LinkedIn' },
               ].map((s, idx) => (
                 <a
@@ -136,33 +135,7 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Headquarters Info */}
-          <div className="space-y-3">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-base-content/50">
-              Dhaka Headquarters
-            </h4>
-            <div className="space-y-2 text-xs sm:text-sm text-base-content/75">
-              <div className="flex items-start gap-2.5">
-                <FiMapPin className="w-4 h-4 text-brand-600 mt-0.5 flex-shrink-0" />
-                <span>Level 4, House 28, Road 11, Banani, Dhaka-1213, Bangladesh</span>
-              </div>
-              <div className="flex items-center gap-2.5">
-                <FiPhone className="w-4 h-4 text-sky-500 flex-shrink-0" />
-                <span>+880 1712-000000</span>
-              </div>
-              <div className="flex items-center gap-2.5">
-                <FiMail className="w-4 h-4 text-warm-500 flex-shrink-0" />
-                <span>contact@altru-bangladesh.org</span>
-              </div>
-            </div>
-
-            <div className="pt-2">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-semibold bg-brand-50 dark:bg-brand-950/60 text-brand-700 dark:text-brand-300 border border-brand-200 dark:border-brand-800">
-                <span className="w-2 h-2 rounded-full bg-brand-500 animate-pulse"></span>
-                Altru Civic Grid Online
-              </span>
-            </div>
-          </div>
+          
         </div>
       </div>
 
@@ -172,7 +145,6 @@ export default function Footer() {
           <p>© {new Date().getFullYear()} Altru Bangladesh. Built for community impact.</p>
           <div className="flex items-center gap-1 text-xs">
             <span>Powered by volunteers uniting for solidarity</span>
-            <FiHeart className="w-3.5 h-3.5 text-rose-500 fill-current ml-0.5" />
           </div>
         </div>
       </div>

@@ -15,13 +15,7 @@ import {
 import { HiSparkles } from 'react-icons/hi2';
 
 export default function HeroBanner() {
-  const stats = [
-    { label: 'Verified Drives', value: '180+', icon: <FiCalendar className="w-5 h-5 text-sky-400" /> },
-    { label: 'Active Volunteers', value: '4,850+', icon: <FiUsers className="w-5 h-5 text-indigo-400" /> },
-    { label: 'Needy Supported', value: '28,000+', icon: <FiHeart className="w-5 h-5 text-rose-400" /> },
-    { label: 'Districts Reached', value: '16 Cities', icon: <FiMapPin className="w-5 h-5 text-warm-500" /> },
-  ];
-
+ 
   const handleShare = () => {
     if (typeof window !== 'undefined') {
       navigator.clipboard?.writeText(window.location.origin);
@@ -43,12 +37,7 @@ export default function HeroBanner() {
           {/* Left Column: Mission, Headlines & Actions */}
           <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
             {/* Live Trending Civic Pulse */}
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-500/10 border border-brand-500/20 text-brand-300 text-xs font-semibold backdrop-blur-md shadow-sm">
-              <HiSparkles className="w-4 h-4 text-warm-500" />
-              <span>Civic Pulse Bangladesh</span>
-              <span className="w-1.5 h-1.5 rounded-full bg-brand-400 animate-pulse"></span>
-              <span className="text-white/60 hidden sm:inline">Winter Relief Drives Active</span>
-            </div>
+            
 
             <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.12]">
               Compassionate Hearts.{' '}
@@ -58,7 +47,7 @@ export default function HeroBanner() {
             </h1>
 
             <p className="text-sm sm:text-base text-slate-300 max-w-2xl mx-auto lg:mx-0 font-normal leading-relaxed">
-              Altru unites student clubs, neighborhood associations, and grassroots changemakers across Dhaka and beyond. From winter warmth drives in Mirpur 10 and Mohammadpur to urban tree planting and health clinics, step forward to organize, volunteer, and track social service in your area.
+              Altru unites student clubs, neighborhood associations, and grassroots changemakers across Dhaka and beyond. From winter warmth drives to urban tree planting and health clinics, step forward to organize, volunteer, and track social service in your area.
             </p>
 
             {/* CTAs */}
@@ -113,7 +102,7 @@ export default function HeroBanner() {
               {/* Main Card with Curved Borders */}
               <div className="relative rounded-3xl overflow-hidden border border-white/15 bg-slate-900/60 backdrop-blur-xl shadow-2xl p-2">
                 <img
-                  src="https://images.unsplash.com/photo-1593113598332-cd288d649433?auto=format&fit=crop&w=800&q=80"
+                  src="https://kinsust.org/images/wings/winter.webp"
                   alt="Altru volunteers distributing warm clothes to vulnerable communities in Dhaka"
                   className="w-full h-72 sm:h-80 object-cover rounded-2xl"
                 />
@@ -136,8 +125,8 @@ export default function HeroBanner() {
                   <FiUsers className="w-5 h-5" />
                 </div>
                 <div>
-                  <p className="text-xs text-slate-400 font-medium">Joined This Week</p>
-                  <p className="text-sm font-bold text-white">+420 Volunteers</p>
+                  <p className="text-xs text-slate-400 font-medium">Free Volunteers</p>
+                  <p className="text-sm font-bold text-white">For Humanity</p>
                 </div>
               </div>
 
@@ -155,23 +144,7 @@ export default function HeroBanner() {
           </div>
         </div>
 
-        {/* 4 Bottom Metric Counters */}
-        <div className="mt-16 pt-10 border-t border-slate-800/80 grid grid-cols-2 md:grid-cols-4 gap-6">
-          {stats.map((s, idx) => (
-            <div
-              key={idx}
-              className="bg-slate-900/40 border border-slate-800/60 rounded-2xl p-4 sm:p-5 flex items-center gap-3.5 backdrop-blur-sm hover:border-brand-500/30 transition-all duration-300"
-            >
-              <div className="p-3 rounded-xl bg-slate-800/70 border border-white/5">
-                {s.icon}
-              </div>
-              <div>
-                <p className="text-lg sm:text-2xl font-black text-white tracking-tight">{s.value}</p>
-                <p className="text-xs text-slate-400 font-medium">{s.label}</p>
-              </div>
-            </div>
-          ))}
-        </div>
+      
       </div>
     </section>
   );

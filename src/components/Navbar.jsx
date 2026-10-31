@@ -88,7 +88,7 @@ export default function Navbar() {
                 Altru
               </span>
               <span className="hidden sm:block text-[9px] font-bold uppercase tracking-wider text-base-content/60 -mt-1">
-                Community Impact
+                Civic Network Bangladesh
               </span>
             </div>
           </Link>
