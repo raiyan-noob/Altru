@@ -199,7 +199,7 @@ export default function Navbar() {
                         <p className="text-[11px] text-base-content/60 truncate">{user.email}</p>
                         <span className="inline-flex items-center gap-1 mt-1.5 px-2 py-0.5 rounded-full text-[10px] font-medium bg-brand-50 text-brand-700 dark:bg-brand-950/60 dark:text-brand-300 border border-brand-200 dark:border-brand-800">
                           <span className="w-1.5 h-1.5 rounded-full bg-brand-500"></span>
-                          Verified Volunteer
+                          Verified Member
                         </span>
                       </div>
 
