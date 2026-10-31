@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
 import PrivateRoute from '@/components/PrivateRoute';
@@ -15,6 +15,8 @@ import {
   FiCheck,
   FiAlertCircle,
   FiRefreshCw,
+  FiUpload,
+  FiImage,
 } from 'react-icons/fi';
 import { HiSparkles } from 'react-icons/hi2';
 import { TableRowSkeleton } from '@/components/LoadingSkeleton';
@@ -38,6 +40,23 @@ function ManageEventsContent() {
     description: '',
   });
   const [updating, setUpdating] = useState(false);
+  const editFileInputRef = useRef(null);
+
+  const handleEditFileChange = (e) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (file.size > 5 * 1024 * 1024) {
+        toast.warn('Please select an image smaller than 5MB.');
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = () => {
+        setEditFormData((prev) => ({ ...prev, thumbnail: reader.result }));
+        toast.success('Thumbnail loaded from your device!', { icon: '📷' });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
 
@@ -506,16 +525,54 @@ function ManageEventsContent() {
                   </div>
                 </div>
 
-                <div className="space-y-1">
-                  <label className="font-bold text-base-content/80">Thumbnail Image URL</label>
-                  <input
-                    type="url"
-                    value={editFormData.thumbnail}
-                    onChange={(e) =>
-                      setEditFormData({ ...editFormData, thumbnail: e.target.value })
-                    }
-                    className="w-full px-3.5 py-2.5 rounded-2xl bg-base-200/50 border border-base-300 focus:border-brand-500 focus:outline-none"
-                  />
+                <div className="space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <label className="font-bold text-base-content/80 flex items-center gap-1.5 text-xs uppercase tracking-wider">
+                      <FiImage className="w-4 h-4 text-sky-500" />
+                      <span>Thumbnail Image</span>
+                    </label>
+                    <button
+                      type="button"
+                      onClick={() => editFileInputRef.current?.click()}
+                      className="text-[11px] font-bold text-brand-600 hover:text-brand-500 hover:underline flex items-center gap-1"
+                    >
+                      <FiUpload className="w-3 h-3" />
+                      <span>Choose from device</span>
+                    </button>
+                  </div>
+                  <div className="relative flex items-center">
+                    <FiImage className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-base-content/50 pointer-events-none" />
+                    <input
+                      type="text"
+                      value={
+                        editFormData.thumbnail?.startsWith('data:')
+                          ? 'Image selected from device (Click to change)'
+                          : editFormData.thumbnail || ''
+                      }
+                      onChange={(e) =>
+                        setEditFormData({ ...editFormData, thumbnail: e.target.value })
+                      }
+                      onClick={() => editFileInputRef.current?.click()}
+                      placeholder="Click to choose from device or paste image URL"
+                      className="w-full pl-10 pr-24 py-2.5 rounded-2xl bg-base-200/50 border border-base-300 focus:border-brand-500 focus:outline-none cursor-pointer text-xs sm:text-sm"
+                      readOnly={editFormData.thumbnail?.startsWith('data:')}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => editFileInputRef.current?.click()}
+                      className="absolute right-2 px-2.5 py-1 rounded-xl bg-brand-600/10 hover:bg-brand-600 text-brand-600 hover:text-white text-[11px] font-bold transition-all flex items-center gap-1"
+                    >
+                      <FiUpload className="w-3 h-3" />
+                      <span>Browse</span>
+                    </button>
+                    <input
+                      type="file"
+                      ref={editFileInputRef}
+                      accept="image/*"
+                      onChange={handleEditFileChange}
+                      className="hidden"
+                    />
+                  </div>
                 </div>
 
                 <div className="space-y-1">
