@@ -83,8 +83,8 @@ export default function Navbar() {
             <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-brand-600 via-indigo-600 to-sky-500 flex items-center justify-center text-white shadow-glow group-hover:scale-105 group-hover:rotate-1 transition-all duration-300">
               <FaHandsHelping className="w-5 h-5 text-amber-200" />
             </div>
-            <div>
-              <span className="text-xl font-black tracking-tight bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 bg-clip-text text-transparent">
+            <div className="flex flex-col">
+              <span className="text-xl font-extrabold tracking-tight bg-gradient-to-r from-brand-600 via-indigo-600 to-sky-500 bg-clip-text text-transparent">
                 Altru
               </span>
               <span className="hidden sm:block text-[9px] font-bold uppercase tracking-wider text-base-content/60 -mt-1">
