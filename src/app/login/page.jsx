@@ -11,7 +11,7 @@ import {
   FiEyeOff,
 } from 'react-icons/fi';
 import { FaGoogle } from 'react-icons/fa';
-import { HiSparkles } from 'react-icons/hi2';
+import { FaHandsHelping } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
 
@@ -76,16 +76,6 @@ function LoginForm() {
   };
 
   // Quick fill demo credentials
-  const fillDemo = (role) => {
-    if (role === 'organizer') {
-      setEmail('tahmid.rahman@altru.org');
-      setPassword('AltruPass123');
-    } else {
-      setEmail('nusrat.jahan@altru.org');
-      setPassword('AltruPass123');
-    }
-    toast.info(`Filled credentials for ${role}`, { autoClose: 1000, hideProgressBar: true });
-  };
 
   return (
     <div className="min-h-[85vh] flex items-center justify-center px-4 py-12 bg-base-100">
@@ -94,14 +84,14 @@ function LoginForm() {
         <div className="text-center space-y-2">
           <Link href="/" className="inline-flex items-center gap-2.5 group">
             <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-brand-600 to-sky-500 flex items-center justify-center text-white shadow-glow">
-              <HiSparkles className="w-5 h-5 text-amber-200" />
+              <FaHandsHelping className="w-5 h-5 text-amber-200" />
             </div>
             <span className="text-2xl font-black bg-gradient-to-r from-brand-600 via-indigo-600 to-sky-500 bg-clip-text text-transparent">
               Altru
             </span>
           </Link>
           <h1 className="text-2xl font-extrabold text-base-content tracking-tight">
-            Welcome Back, Changemaker
+            Welcome Back
           </h1>
           <p className="text-xs sm:text-sm text-base-content/60">
             Log in to manage community drives, view RSVPs, and coordinate with volunteers.
@@ -188,35 +178,14 @@ function LoginForm() {
             <span>Continue with Google</span>
           </button>
 
-          {/* Demo Login Quick Fill */}
-          <div className="p-3 rounded-2xl bg-base-200/50 border border-base-300/70 space-y-2">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-base-content/50 block text-center">
-              Quick Demo Fill
-            </span>
-            <div className="grid grid-cols-2 gap-2">
-              <button
-                type="button"
-                onClick={() => fillDemo('organizer')}
-                className="py-1.5 px-2 rounded-xl bg-base-100 border border-base-300 hover:border-brand-500 text-[11px] font-bold text-base-content transition-all"
-              >
-                Lead Organizer
-              </button>
-              <button
-                type="button"
-                onClick={() => fillDemo('volunteer')}
-                className="py-1.5 px-2 rounded-xl bg-base-100 border border-base-300 hover:border-brand-500 text-[11px] font-bold text-base-content transition-all"
-              >
-                Volunteer
-              </button>
-            </div>
-          </div>
+         
 
           {/* Footer Link */}
           <div className="text-center pt-1 border-t border-base-200">
             <p className="text-xs text-base-content/70">
               Don&apos;t have an account yet?{' '}
               <Link href="/register" className="font-bold text-brand-600 hover:underline">
-                Register as Volunteer →
+                Register Here →
               </Link>
             </p>
           </div>

@@ -3,6 +3,7 @@ import React, { useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { FiHeart } from 'react-icons/fi';
+import { toast } from 'react-toastify';
 
 export default function PrivateRoute({ children }) {
   const { user, loading } = useAuth();
@@ -11,6 +12,10 @@ export default function PrivateRoute({ children }) {
 
   useEffect(() => {
     if (!loading && !user) {
+      toast.warn('Please sign in to access this page.', {
+        toastId: 'auth-required',
+        icon: '🔒',
+      });
       // Store redirect target
       try {
         sessionStorage.setItem('altru_redirect', pathname);
@@ -23,8 +28,8 @@ export default function PrivateRoute({ children }) {
     return (
       <div className="min-h-[70vh] flex flex-col items-center justify-center space-y-4 px-4">
         <div className="relative flex items-center justify-center">
-          <div className="w-16 h-16 rounded-full border-4 border-emerald-500/30 border-t-emerald-600 animate-spin"></div>
-          <FiHeart className="w-6 h-6 text-emerald-600 absolute animate-pulse" />
+          <div className="w-16 h-16 rounded-full border-4 border-brand-500/30 border-t-brand-600 animate-spin"></div>
+          <FiHeart className="w-6 h-6 text-brand-600 absolute animate-pulse" />
         </div>
         <div className="text-center">
           <p className="font-bold text-base text-base-content">Authenticating Volunteer Session...</p>
@@ -40,4 +45,3 @@ export default function PrivateRoute({ children }) {
 
   return <>{children}</>;
 }
-
