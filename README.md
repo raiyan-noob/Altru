@@ -1,9 +1,7 @@
 # Altru — Community-Driven Social Development Events Platform
 
-Altru is a modern, responsive web application empowering citizens, youth clubs, and humanitarian organizers across Bangladesh to coordinate, discover, and join impactful local social service events. From emergency winter clothes and blanket distributions in Mirpur and Mohammadpur to urban tree plantations and free health camps, Altru makes civic engagement accessible and transparent.
+Altru is a modern, responsive web application empowering citizens, youth clubs, and humanitarian organizers across Bangladesh to coordinate, discover, and join impactful local social service events. From emergency winter clothes and blanket distributions to urban tree plantations and free health camps, Altru makes civic engagement accessible and transparent.
 
-- **Live Site URL:** https://altru-community.vercel.app (or local `http://localhost:3000`)
-- **Backend API URL:** https://altru-server.onrender.com (or local `http://localhost:5000`)
 
 ---
 
